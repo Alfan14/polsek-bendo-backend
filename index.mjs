@@ -9,7 +9,14 @@ import path from "path";
 
 // route
 import authRoutes from './routes/api/authRoutes.mjs';
+import userRoutes from './routes/api/userRoute.mjs';
+import skckRoutes from './routes/api/skckRoute.mjs';
+import suratLaporanKehilanganRoutes from "./routes/api/suratLaporanKehilanganRoute.mjs";
+import suratIzinKeramaianRoutes from "./routes/api/suratIzinKeramaian.mjs";
+import pengaduanMasyarakatRoutes from "./routes/api/pengaduanMasyarakatRoute.mjs";
+import beritaRoutes from "./routes/api/beritaRoute.mjs";
 
+import initChatHandler from "./sockets/initChatHandler.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,39 +27,48 @@ const upload = multer();
 const PORT = process.env.SERVER_PORT || 5000;
 const app = express();
 
-const allowedOrigins = [process.env.ORIGIN, process.env.PROD_ORIGIN];
+// const allowedOrigins = [process.env.ORIGIN, process.env.PROD_ORIGIN];
 
-const corsOptions = {
-  origin: [process.env.ORIGIN, process.env.PROD_ORIGIN],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'session-id'],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: [process.env.ORIGIN, process.env.PROD_ORIGIN],
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization', 'session-id'],
+//   credentials: true,
+// };
 
-console.log('Allowed origins:', allowedOrigins);
+//console.log('Allowed origins:', allowedOrigins);
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
 
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  path: "/socket.io",
-  cors: {
-    origin: [process.env.ORIGIN, process.env.PROD_ORIGIN],
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-});
-console.log("Initializing chat handler...");
-initChatHandler(io);
+// const httpServer = createServer(app);
+// const io = new Server(httpServer, {
+//   path: "/socket.io",
+//   cors: {
+//     origin: [process.env.ORIGIN, process.env.PROD_ORIGIN],
+//     methods: ['GET', 'POST'],
+//     credentials: true,
+//   },
+// });
+// console.log("Initializing chat handler...");
+// initChatHandler(io);
 
 // Middleware
 app.use(express.json());
 app.use(upload.array());
 
-// Routes
+// API Routes
 app.use('/api/', userRoutes);
-app.use('/api/', authRoutes);
+app.use('/api/', skckRoutes);
+app.use('/api/', pengaduanMasyarakatRoutes);
+app.use('/api/', skckRoutes);
+app.use('/api/', suratIzinKeramaianRoutes);
+app.use('/api/', suratLaporanKehilanganRoutes);
+app.use('/api/', beritaRoutes);
+
+
+// Auth Routes
+app.use('/auth/', authRoutes);
 
 app.get("/", (req, res) => {
   res.send("This is the default Server Route");
@@ -63,6 +79,6 @@ app.use((err, req, res, next) => {
   res.status(500).send("Uh oh! An unexpected error occurred.");
 });
 
-httpServer.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });

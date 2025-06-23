@@ -9,12 +9,13 @@ const User = db.users;
 
 const register = async (req, res) => {
  try {
-   const { username, email, password , role } = req.body;
+   const { username, email, password , role , profile_picture } = req.body;
    const data = {
      username,
      email,
      password: await bcrypt.hash(password, 10),
-     role
+     role,
+     profile_picture
    };
 
    const user = await User.create(data);
@@ -51,7 +52,7 @@ const { email, password } = req.body;
      const isSame = await bcrypt.compare(password, user.password);
 
      if (isSame) {
-       let token = jwt.sign({ id: user.id,username: user.username, email: user.email, role: user.role }, SECRET_KEY, {
+       let token = jwt.sign({ id: user.id,username: user.username, email: user.email, role: user.role , }, SECRET_KEY, {
         expiresIn: '1d',
         });
 
