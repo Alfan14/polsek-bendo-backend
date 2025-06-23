@@ -9,7 +9,6 @@ const router = express.Router()
 
 router.post('/signup', userAuth.saveUser, register)
 
-//login route
 router.post('/login', login )
 
 export default router

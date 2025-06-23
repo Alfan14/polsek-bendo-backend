@@ -1,11 +1,20 @@
 import {Sequelize, DataTypes} from 'sequelize';
 import userModel from '../models/userModel.mjs'; 
 import dotenv from 'dotenv';
-dotenv.config();
+import pg from 'pg';
 
-const DATABASE_URL = process.env.DATABASE_URL
 
-const sequelize = new Sequelize(DATABASE_URL, {
+const Pool = pg.Pool
+
+dotenv.config(); 
+
+const sequelize = new Sequelize( {
+  connectionString: process.env.POSTGRES_URL,
+  user: process.env.POSTGRES_USER,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DATABASE,
+  password: process.env.POSTGRES_PASSWORD,
+  port: 5432,
   dialect: "postgres",
   dialectOptions: {
     ssl: {

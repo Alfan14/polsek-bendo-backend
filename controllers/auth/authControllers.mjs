@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { defaults } from "pg";
-import db from "../models/index.mjs";
+import db from "../../models/index.mjs";
 
 const SECRET_KEY = process.env.SECRET_KEY ;
 
