@@ -8,20 +8,37 @@ const Pool = pg.Pool
 
 dotenv.config(); 
 
-const sequelize = new Sequelize(
-  process.env.POSTGRES_DATABASE,
-  process.env.POSTGRES_USER,
-  process.env.POSTGRES_PASSWORD,
-  {
-    host: process.env.POSTGRES_HOST,
-    port: 5432,
-    dialect: "postgres",
-    dialectOptions: {},
-    define: {
-      schema: 'public',
+// For production Database
+const DATABASE_URL = process.env.POSTGRES_URL
+
+const sequelize = new Sequelize(DATABASE_URL, {
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
     },
-  }
-);
+  },
+  define: {
+    schema: 'public',
+  },
+});
+
+// For local database
+// const sequelize = new Sequelize(
+//   process.env.POSTGRES_DATABASE,
+//   process.env.POSTGRES_USER,
+//   process.env.POSTGRES_PASSWORD,
+//   {
+//     host: process.env.POSTGRES_HOST,
+//     port: 43425,
+//     dialect: "postgres",
+//     dialectOptions: {},
+//     define: {
+//       schema: 'public',
+//     },
+//   }
+// );
 
     sequelize.authenticate().then(() => {
         console.log(`Database connected`)
