@@ -40,6 +40,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
 //   }
 // );
 
+
     sequelize.authenticate().then(() => {
         console.log(`Database connected`)
     }).catch((err) => {
