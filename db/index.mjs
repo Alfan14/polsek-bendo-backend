@@ -5,6 +5,8 @@ const Pool = pg.Pool
 
 dotenv.config(); 
 
+
+// For production database
 const DATABASE_URL = process.env.POSTGRES_URL ;
 
 const pool = new Pool({
