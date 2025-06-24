@@ -71,6 +71,7 @@ app.use('/api/', beritaRoutes);
 app.use('/auth/', authRoutes);
 
 app.get("/", (req, res) => {
+  console.log("Halo kamu sampai default Route");
   res.send("This is the default Server Route");
 });
 
