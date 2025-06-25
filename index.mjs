@@ -26,8 +26,7 @@ dotenv.config();
 
 const PORT = process.env.SERVER_PORT || 5000;
 const app = express();
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer();
 
 app.use(cors({
   origin: 'http://localhost:3000', 
