@@ -59,7 +59,7 @@ app.use(cors({
 // initChatHandler(io);
 
 // Middleware
-// app.use(express.json());
+app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.text());
 // app.use(upload.array());
