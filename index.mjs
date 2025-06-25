@@ -15,7 +15,7 @@ import suratLaporanKehilanganRoutes from "./routes/api/suratLaporanKehilanganRou
 import suratIzinKeramaianRoutes from "./routes/api/suratIzinKeramaian.mjs";
 import pengaduanMasyarakatRoutes from "./routes/api/pengaduanMasyarakatRoute.mjs";
 import beritaRoutes from "./routes/api/beritaRoute.mjs";
-import cloudinaryController from "./controllers/cloudinaryController.mjs"
+import cloudinaryController from "./controllers/cloudinaryController.mjs";
 
 import initChatHandler from "./sockets/initChatHandler.mjs";
 
@@ -62,6 +62,7 @@ app.use(cors({
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.text());
 app.use(upload.array());
 
 // API Routes
