@@ -61,6 +61,7 @@ app.use(cors({
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(upload.array());
 
 // API Routes
