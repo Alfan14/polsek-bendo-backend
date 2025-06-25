@@ -73,7 +73,7 @@ app.use('/api/', skckRoutes);
 app.use('/api/', suratIzinKeramaianRoutes);
 app.use('/api/', suratLaporanKehilanganRoutes);
 app.use('/api/', beritaRoutes);
-app.use('/api/',cloudinaryController);
+app.use('/api/', cloudinaryController);
 
 
 // Auth Routes
