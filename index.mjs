@@ -27,6 +27,11 @@ const upload = multer();
 const PORT = process.env.SERVER_PORT || 5000;
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  credentials: true                
+}));
+
 // const allowedOrigins = [process.env.ORIGIN, process.env.PROD_ORIGIN];
 
 // const corsOptions = {
