@@ -24,7 +24,6 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
-const upload = multer();
 const PORT = process.env.SERVER_PORT || 5000;
 const app = express();
 
@@ -60,10 +59,10 @@ app.use(cors({
 // initChatHandler(io);
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.text());
-app.use(upload.array());
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.text());
+// app.use(upload.array());
 
 // API Routes
 app.use('/api/', userRoutes);
