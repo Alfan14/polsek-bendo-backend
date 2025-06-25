@@ -7,18 +7,15 @@ dotenv.config();
 
 const router = express.Router()
 
-// Configure Cloudinary (use your own cloud_name, api_key, and api_secret)
 cloudinary.config({
-  cloud_name: process.env.ALFAN_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.ALFAN_PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: process.env.ALFAN_CLOUDINARY_API_SECRET
+  cloud_name: "dcnpu9qlr",
+  api_key: "671138926981391",
+  api_secret: "xYDw8K4vmB8JgWuoQ59X0Bgyjn0"
 });
 
-// Set up Multer for handling file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Handle image upload
 router.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
