@@ -62,7 +62,7 @@ app.use(cors({
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.text());
-// app.use(upload.array());
+app.use(upload.array());
 
 // API Routes
 app.use('/api/', userRoutes);
