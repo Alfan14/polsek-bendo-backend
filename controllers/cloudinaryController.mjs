@@ -13,9 +13,6 @@ cloudinary.config({
   api_secret: "xYDw8K4vmB8JgWuoQ59X0Bgyjn0"
 });
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 router.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
