@@ -21,11 +21,11 @@ const getSkckById = (request, response) => {
 }
 
 const createSkck = (request, response) => {
-  const { applicant_name, place_date_birth, needs, id_number, submission_date, verification_status, officer_notes , passport_photo} = request.body
+  const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo} = request.body
 
   pool.query(
-    'INSERT INTO skck ( applicant_name, place_date_birth, needs, id_number, submission_date, verification_status, officer_notes , passport_photo) VALUES ($1, $2, $3, $4, $5, $6, $7 , $8)',
-    [ applicant_name, place_date_birth, needs, id_number, submission_date, verification_status, officer_notes , passport_photo],
+    'INSERT INTO skck ( applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo) VALUES ($1, $2, $3, $4, $5, $6, $7 , $8, $9)',
+    [ applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo],
     (error, results) => {
       if (error) {
         throw error;
@@ -36,11 +36,11 @@ const createSkck = (request, response) => {
 
 const updateSkck = (request, response) => {
   const id = parseInt(request.params.id)
-  const { applicant_name, place_date_birth, needs, id_number, submission_date, verification_status, officer_notes, passport_photo} = request.body
+  const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo} = request.body
 
   pool.query(
-    'UPDATE skck SET applicant_name = $1, place_date_birth = $2, needs = $3, id_number = $4, submission_date = $5, verification_status = $6, officer_notes = $7 passport_photo = $8 WHERE id = $9',
-    [applicant_name, place_date_birth, needs, id_number, submission_date, verification_status, officer_notes, passport_photo, id],
+    'UPDATE skck SET applicant_name = $1, place_date_birth = $2, complete_address = $3, needs = $4, id_number = $5, submission_date = $6, verification_status = $7, officer_notes = $8 passport_photo = $9 WHERE id = $10',
+    [applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo, id],
     (error, results) => {
       if (error) {
         throw error
