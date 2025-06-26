@@ -5,13 +5,12 @@ const Pool = pg.Pool
 
 dotenv.config(); 
 
-
 // For production database
-const DATABASE_URL = process.env.POSTGRES_URL ;
+const POSTGRES_URL = process.env.POSTGRES_URL ;
 
 const pool = new Pool({
   
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.POSTGRES_URL,
   ssl: {
     require: true,
     rejectUnauthorized: false
