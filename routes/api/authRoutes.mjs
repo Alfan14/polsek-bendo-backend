@@ -10,7 +10,7 @@ const router = express.Router()
 
 const generalFormParser = multer();
 
-router.post('/signup', generalFormParser.none(), userAuth.saveUser, register)
+router.post('/signup', userAuth.saveUser, register)
 
 router.post('/login', login )
 
