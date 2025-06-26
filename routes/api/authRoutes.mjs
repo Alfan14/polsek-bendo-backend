@@ -2,12 +2,15 @@
 import express from 'express';
 import authController from '../../controllers/auth/authControllers.mjs';
 import userAuth from '../../middlewares/userAuth.mjs';
+import multer from 'multer';
 
 const { register, login } = authController
 
 const router = express.Router()
 
-router.post('/signup', userAuth.saveUser, register)
+const generalFormParser = multer();
+
+router.post('/signup', generalFormParser.none(), userAuth.saveUser, register)
 
 router.post('/login', login )
 
