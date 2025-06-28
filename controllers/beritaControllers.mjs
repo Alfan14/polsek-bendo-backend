@@ -39,7 +39,7 @@ const updateNews = (request, response) => {
   const { title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, status, published_at , created_at, updated_at } = request.body
 
   pool.query(
-    'UPDATE news SET title = $1, slug = $2, excerpt = $3, content = $4, author_id = $5, category_id = $6, url_gambar_unggulan = $7, status = $8, published_at = $9, created_at = $10, updated_at = $11, published_at = $11 WHERE id = $12',
+    'UPDATE news SET title = $1, slug = $2, excerpt = $3, content = $4, author_id = $5, category_id = $6, url_gambar_unggulan = $7, status = $8, published_at = $9, created_at = $10, updated_at = $11, published_at = $12 WHERE id = $13',
     [title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, ,status, published_at , created_at, updated_at, id],
     (error, results) => {
       if (error) {
