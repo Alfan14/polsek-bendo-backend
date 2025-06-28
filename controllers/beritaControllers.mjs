@@ -24,7 +24,7 @@ const createNews = (request, response) => {
   const { title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at } = request.body
 
   pool.query(
-    'INSERT INTO news (title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    'INSERT INTO news (title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
     [title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at],
     (error, results) => {
       if (error) {
