@@ -21,11 +21,11 @@ const getNewsById = (request, response) => {
 }
 
 const createNews = (request, response) => {
-  const { title, slug, excerpt, content, author_id, category_id, published_at } = request.body
+  const { title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at } = request.body
 
   pool.query(
-    'INSERT INTO news (title, slug, excerpt, content, author_id, category_id, published_at) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-    [title, slug, excerpt, content, author_id, category_id, published_at],
+    'INSERT INTO news (title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    [title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at],
     (error, results) => {
       if (error) {
         throw error;
@@ -36,11 +36,11 @@ const createNews = (request, response) => {
 
 const updateNews = (request, response) => {
   const id = parseInt(request.params.id)
-  const { title, slug, excerpt, content, author_id, category_id, published_at } = request.body
+  const { title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at } = request.body
 
   pool.query(
-    'UPDATE news SET title = $1, slug = $2, excerpt = $3, content = $4, author_id = $5, category_id = $6, published_at = $7 WHERE id = $8',
-    [title, slug, excerpt, content, author_id, category_id, published_at, id],
+    'UPDATE news SET title = $1, slug = $2, excerpt = $3, content = $4, author_id = $5, category_id = $6, url_gambar_unggulan = $7, published_at = $8 WHERE id = $9',
+    [title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, published_at, id],
     (error, results) => {
       if (error) {
         throw error
