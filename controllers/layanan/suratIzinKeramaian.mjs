@@ -21,11 +21,11 @@ const getSikById = (request, response) => {
 }
 
 const createSik = (request, response) => {
-  const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees } = request.body
+  const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation} = request.body
 
   pool.query(
-    'INSERT INTO crowd_permit_letter (organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-    [organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees],
+    'INSERT INTO crowd_permit_letter (organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation) VALUES ($1, $2, $3, $4, $5, $6, $7, $8 , $9)',
+    [organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation],
     (error, results) => {
       if (error) {
         throw error;
@@ -36,11 +36,11 @@ const createSik = (request, response) => {
 
 const updateSik = (request, response) => {
   const id = parseInt(request.params.id)
-  const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees } = request.body
+  const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation } = request.body
 
   pool.query(
-    'UPDATE crowd_permit_letter SET organizer_name = $1, event_name = $2, event_description = $3, event_start = $4, event_end = $5, location = $6, guest_estimate = $7, levy_fees = $8 WHERE id = $9',
-    [organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees, id],
+    'UPDATE crowd_permit_letter SET organizer_name = $1, event_name = $2, event_description = $3, event_start = $4, event_end = $5, location = $6, guest_estimate = $7, levy_fees = $8 form_creation = $9 WHERE id = $10',
+    [organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees, form_creation, id],
     (error, results) => {
       if (error) {
         throw error
