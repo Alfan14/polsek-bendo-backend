@@ -30,7 +30,7 @@ const createSik = (request, response) => {
       if (error) {
         throw error;
       }
-      response.status(201).send(`User added with ID: ${results.insertId}`);
+      response.status(201).send(`CPL added with ID: ${results.insertId}`);
     });
 }
 
@@ -45,7 +45,7 @@ const updateSik = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`User modified with ID: ${id}`)
+      response.status(200).send(`CPL modified with ID: ${id}`)
     }
   )
 }
@@ -57,7 +57,7 @@ const deleteSik = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).send(`User deleted with ID: ${id}`)
+    response.status(200).send(`CPL deleted with ID: ${id}`)
   })
 }
 

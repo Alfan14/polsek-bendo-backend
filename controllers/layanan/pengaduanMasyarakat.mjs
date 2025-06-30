@@ -21,11 +21,11 @@ const getReportById = (request, response) => {
 }
 
 const createReport = (request, response) => {
-  const { complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, officer_in_charge, result, complaint_status } = request.body
+  const { complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, complaint_status } = request.body
 
   pool.query(
-    'INSERT INTO community_complaints (complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, officer_in_charge, result, complaint_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
-    [complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, officer_in_charge, result, complaint_status],
+    'INSERT INTO community_complaints (complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, complaint_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,)',
+    [complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, complaint_status],
     (error, results) => {
       if (error) {
         throw error;
@@ -36,11 +36,11 @@ const createReport = (request, response) => {
 
 const updateReport = (request, response) => {
   const id = parseInt(request.params.id)
-  const { complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, officer_in_charge, result, complaint_status } = request.body
+  const {  officer_in_charge, result, complaint_status } = request.body
 
   pool.query(
-    'UPDATE community_complaints SET complainant_name = $1, contact = $2, complainant_address = $3, complaint_category = $4, complaint_title = $5, complaint_content = $6, proof = $7, complainant_date = $8, officer_in_charge = $9, result = $10, complaint_status = $11 WHERE id = $12',
-    [complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, officer_in_charge, result, complaint_status, id],
+    'UPDATE community_complaints SET officer_in_charge = $1, result = $2, complaint_status = $3 WHERE id = $4',
+    [ officer_in_charge, result, complaint_status, id],
     (error, results) => {
       if (error) {
         throw error
