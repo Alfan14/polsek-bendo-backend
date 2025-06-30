@@ -30,13 +30,13 @@ const createNews = (request, response) => {
       if (error) {
         throw error;
       }
-      response.status(201).send(`User added with ID: ${results.insertId}`);
+      response.status(201).send(`News added with ID: ${results.insertId}`);
     });
 }
 
 const updateNews = (request, response) => {
   const id = parseInt(request.params.id)
-  const { title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, status, published_at , created_at, updated_at } = request.body
+  const { title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, status, published_at, created_at, updated_at } = request.body
 
   pool.query(
     'UPDATE news SET title = $1, slug = $2, excerpt = $3, content = $4, author_id = $5, category_id = $6, url_gambar_unggulan = $7, status = $8, published_at = $9, created_at = $10, updated_at = $11, published_at = $12 WHERE id = $13',
@@ -45,7 +45,7 @@ const updateNews = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`User modified with ID: ${id}`)
+      response.status(200).send(`News modified with ID: ${id}`)
     }
   )
 }

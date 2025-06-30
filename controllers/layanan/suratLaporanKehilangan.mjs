@@ -21,11 +21,11 @@ const getSlkById = (request, response) => {
 }
 
 const createSlk = (request, response) => {
-  const { reporter_name, contact_reporter, item_type, date_lost, police_number, chronology, status_handling, date_closed } = request.body
+  const { reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling } = request.body
 
   pool.query(
-    'INSERT INTO lost_report_letter (reporter_name, contact_reporter, item_type, date_lost, police_number, chronology, status_handling, date_closed) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-    [reporter_name, contact_reporter, item_type, date_lost, police_number, chronology, status_handling, date_closed],
+    'INSERT INTO lost_report_letter (reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling) VALUES ($1, $2, $3, $4, $5, $6)',
+    [reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling],
     (error, results) => {
       if (error) {
         throw error;
@@ -36,11 +36,11 @@ const createSlk = (request, response) => {
 
 const updateSlk = (request, response) => {
   const id = parseInt(request.params.id)
-  const { reporter_name, contact_reporter, item_type, date_lost, police_number, chronology, status_handling, date_closed } = request.body
+  const {  police_number, status_handling, date_closed } = request.body
 
   pool.query(
-    'UPDATE lost_report_letter SET reporter_name = $1, contact_reporter = $2, item_type = $3, date_lost = $4, police_number = $5, chronology = $6, status_handling = $7, date_closed = $8 WHERE id = $9',
-    [reporter_name, contact_reporter, item_type, date_lost, police_number, chronology, status_handling, date_closed, id],
+    'UPDATE lost_report_letter SET  police_number = $1,  status_handling = $2, date_closed = $3 WHERE id = $4',
+    [ police_number,  status_handling, date_closed, id ],
     (error, results) => {
       if (error) {
         throw error
