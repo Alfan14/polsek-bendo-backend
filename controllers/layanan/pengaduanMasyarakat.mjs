@@ -29,6 +29,7 @@ const createReport = (request, response) => {
     (error, results) => {
       if (error) {
         throw error;
+        console.log("Erornya bro:",error)
       }
       response.status(201).send(`Complainant added with ID: ${results.insertId}`);
     });
