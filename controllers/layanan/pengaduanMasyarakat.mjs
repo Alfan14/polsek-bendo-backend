@@ -24,7 +24,7 @@ const createReport = (request, response) => {
   const { complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, complaint_status } = request.body
 
   pool.query(
-    'INSERT INTO community_complaints (complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, complaint_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,)',
+    'INSERT INTO community_complaints (complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, complaint_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
     [complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complainant_date, complaint_status],
     (error, results) => {
       if (error) {
