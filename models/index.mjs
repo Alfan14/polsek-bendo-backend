@@ -8,7 +8,6 @@ const Pool = pg.Pool
 
 dotenv.config(); 
 
-// For production Database
 const DATABASE_URL = process.env.POSTGRES_URL
 
 const sequelize = new Sequelize(DATABASE_URL, {

@@ -10,6 +10,7 @@ router.get('/skck',db.getSkcks)
 router.get('/skck/:id', db.getSkckById)
 router.post('/skck',db.createSkck)
 router.put('/skck/:id', db.updateSkck)
+router.put('/skck/officer/:id', db.updateSkckOfficer)
 router.delete('/skck/:id',db.deleteSkck)
 
 export default router;
