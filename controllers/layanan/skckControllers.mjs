@@ -52,7 +52,7 @@ const updateSkck = (request, response) => {
 
 const updateSkckOfficer = (request, response) => {
   const id = parseInt(request.params.id)
-  const { submission_date, verification_status, officer_notes, passport_photo } = request.body
+  const { submission_date, verification_status, officer_notes} = request.body
 
   pool.query(
     'UPDATE skck SET submission_date = $1, verification_status = $2, officer_notes = $3  WHERE id = $4',
