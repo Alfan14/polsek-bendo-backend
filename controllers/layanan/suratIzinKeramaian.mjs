@@ -21,11 +21,11 @@ const getSikById = (request, response) => {
 }
 
 const createSik = (request, response) => {
-  const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation} = request.body
+  const { user_id, organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation} = request.body
 
   pool.query(
-    'INSERT INTO crowd_permit_letter (organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation) VALUES ($1, $2, $3, $4, $5, $6, $7, $8 , $9)',
-    [organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation],
+    'INSERT INTO crowd_permit_letter (user_id, organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation) VALUES ($1, $2, $3, $4, $5, $6, $7, $8 , $9, $10)',
+    [user_id, organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees , form_creation],
     (error, results) => {
       if (error) {
         throw error;

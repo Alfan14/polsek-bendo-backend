@@ -21,11 +21,11 @@ const getSkckById = (request, response) => {
 }
 
 const createSkck = (request, response) => {
-  const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo} = request.body
+  const { user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo} = request.body
 
   pool.query(
-    'INSERT INTO skck ( applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo) VALUES ($1, $2, $3, $4, $5, $6, $7 , $8, $9)',
-    [ applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo],
+    'INSERT INTO skck ( user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo) VALUES ($1, $2, $3, $4, $5, $6, $7 , $8, $9, $10)',
+    [ user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo],
     (error, results) => {
       if (error) {
         throw error;
@@ -52,7 +52,7 @@ const updateSkck = (request, response) => {
 
 const updateSkckOfficer = (request, response) => {
   const id = parseInt(request.params.id)
-  const { submission_date, verification_status, officer_notes} = request.body
+  const { submission_date, verification_status, officer_notes } = request.body
 
   pool.query(
     'UPDATE skck SET submission_date = $1, verification_status = $2, officer_notes = $3  WHERE id = $4',

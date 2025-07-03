@@ -21,11 +21,11 @@ const getSlkById = (request, response) => {
 }
 
 const createSlk = (request, response) => {
-  const { reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling } = request.body
+  const { user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling } = request.body
 
   pool.query(
-    'INSERT INTO lost_report_letter (reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling) VALUES ($1, $2, $3, $4, $5, $6)',
-    [reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling],
+    'INSERT INTO lost_report_letter (user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    [user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling],
     (error, results) => {
       if (error) {
         throw error;
