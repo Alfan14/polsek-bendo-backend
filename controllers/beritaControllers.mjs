@@ -50,6 +50,74 @@ const updateNews = (request, response) => {
   )
 }
 
+const patchNews = async (request, response) => {
+    const id = parseInt(request.params.id);
+    const { title, slug, excerpt, content, author_id, category_id, url_gambar_unggulan, status, published_at, created_at, updated_at } = request.body;
+
+    const fields = [];
+    const values = [];
+    let valueIndex = 1;
+
+     if (title) {
+      fields.push(`title = $${valueIndex++}`);
+      values.push(title);
+    }
+    if (slug) {
+      fields.push(`slug = $${valueIndex++}`);
+      values.push(slug);
+    }
+    if (excerpt) {
+      fields.push(`excerpt = $${valueIndex++}`);
+      values.push(excerpt);
+    }
+    if (content) {
+      fields.push(`content = $${valueIndex++}`);
+      values.push( content);
+    }
+    if (author_id) {
+      fields.push(`author_id = $${valueIndex++}`);
+      values.push(author_id);
+    }
+    if (category_id) {
+      fields.push(`category_id = $${valueIndex++}`);
+      values.push(category_id);
+    }
+    if (url_gambar_unggulan) {
+      fields.push(`url_gambar_unggulan = $${valueIndex++}`);
+      values.push(url_gambar_unggulan);
+    }
+    if (status) {
+      fields.push(`status = $${valueIndex++}`);
+      values.push(status);
+    }
+    if (published_at) {
+      fields.push(`published_at = $${valueIndex++}`);
+      values.push(published_at);
+    }
+    if (created_at) {
+      fields.push(`created_at = $${valueIndex++}`);
+      values.push( created_at);
+    }
+    if (updated_at) {
+      fields.push(`updated_at = $${valueIndex++}`);
+      values.push(updated_at);
+    }
+  
+    if (fields.length === 0) {
+      return response.status(400).json({ message: "No fields to update." });
+    }
+
+    values.push(id);
+    const query = `UPDATE news SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
+
+    pool.query(query, values, (error, results) => {
+      if (error) {
+        return response.status(500).json({ message: "Update failed.", error });
+      }
+      response.status(200).send(`NEWS with ID: ${id} patched.`);
+    });
+  };
+
 const deleteNews = (request, response) => {
   const id = parseInt(request.params.id)
 
@@ -66,5 +134,6 @@ export default {
   getNewsById,
   createNews,
   updateNews,
+  patchNews,
   deleteNews,
 }

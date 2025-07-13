@@ -50,6 +50,63 @@ const updateSik = (request, response) => {
   )
 }
 
+
+const patchSik = async (request, response) => {
+    const id = parseInt(request.params.id);
+    const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees, form_creation } = request.body;
+
+    const fields = [];
+    const values = [];
+    let valueIndex = 1;
+
+     if (organizer_name) {
+      fields.push(`organizer_name = $${valueIndex++}`);
+      values.push(organizer_name);
+    }
+    if (event_name) {
+      fields.push(`event_name = $${valueIndex++}`);
+      values.push(event_name);
+    }
+    if (event_description) {
+      fields.push(`event_description = $${valueIndex++}`);
+      values.push(event_description);
+    }
+    if (event_start) {
+      fields.push(`event_start = $${valueIndex++}`);
+      values.push( event_start);
+    }
+    if (event_end) {
+      fields.push(`event_end = $${valueIndex++}`);
+      values.push(event_end);
+    }
+    if (location) {
+      fields.push(`location = $${valueIndex++}`);
+      values.push(location);
+    }
+    if (levy_fees) {
+      fields.push(`levy_fees = $${valueIndex++}`);
+      values.push(levy_fees);
+    }
+    if (form_creation) {
+      fields.push(`form_creation = $${valueIndex++}`);
+      values.push(form_creation);
+    }
+  
+    if (fields.length === 0) {
+      return response.status(400).json({ message: "No fields to update." });
+    }
+
+    values.push(id);
+    const query = `UPDATE scrowd_permit_letter SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
+
+    pool.query(query, values, (error, results) => {
+      if (error) {
+        return response.status(500).json({ message: "Update failed.", error });
+      }
+      response.status(200).send(`SIK with ID: ${id} patched.`);
+    });
+  };
+
 const deleteSik = (request, response) => {
   const id = parseInt(request.params.id)
 
@@ -66,5 +123,6 @@ export default {
   getSikById,
   createSik,
   updateSik,
+  patchSik,
   deleteSik,
 }

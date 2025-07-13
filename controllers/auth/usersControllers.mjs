@@ -50,6 +50,61 @@ const updateUser = (request, response) => {
   )
 }
 
+const patchReport = async (request, response) => {
+    const id = parseInt(request.params.id);
+    const { username, email, password, role, createdAt, updatedAt, profile_picture } = request.body;
+
+    const fields = [];
+    const values = [];
+    let valueIndex = 1;
+
+     if (username) {
+      fields.push(`username = $${valueIndex++}`);
+      values.push(username);
+    }
+
+    if (email) {
+      fields.push(`email = $${valueIndex++}`);
+      values.push(email);
+    }
+    if (password) {
+      fields.push(`password = $${valueIndex++}`);
+      values.push(password);
+    }
+    if (role) {
+      fields.push(`role = $${valueIndex++}`);
+      values.push(role);
+    }
+    if (createdAt) {
+      fields.push(`createdAt = $${valueIndex++}`);
+      values.push(createdAt);
+    }
+    if (updatedAt) {
+      fields.push(`updatedAt = $${valueIndex++}`);
+      values.push(updatedAt);
+    }
+
+    if (profile_picture) {
+      fields.push(`profile_picture = $${valueIndex++}`);
+      values.push(profile_picture);
+    }
+
+    if (fields.length === 0) {
+      return response.status(400).json({ message: "No fields to update." });
+    }
+
+    values.push(id);
+    const query = `UPDATE community_complaints SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
+
+    pool.query(query, values, (error, results) => {
+      if (error) {
+        return response.status(500).json({ message: "Update failed.", error });
+      }
+      response.status(200).send(`PM with ID: ${id} patched.`);
+    });
+  };
+
+
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id)
 

@@ -50,6 +50,60 @@ const updateSlk = (request, response) => {
   )
 }
 
+
+const patchSik = async (request, response) => {
+    const id = parseInt(request.params.id);
+    const { user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling } = request.body;
+
+    const fields = [];
+    const values = [];
+    let valueIndex = 1;
+
+     if (user_id) {
+      fields.push(`user_id = $${valueIndex++}`);
+      values.push(user_id);
+    }
+    if (reporter_name) {
+      fields.push(`reporter_name = $${valueIndex++}`);
+      values.push(reporter_name);
+    }
+    if (contact_reporter) {
+      fields.push(`contact_reporter = $${valueIndex++}`);
+      values.push(contact_reporter);
+    }
+    if (item_type) {
+      fields.push(`item_type = $${valueIndex++}`);
+      values.push( item_type);
+    }
+    if (date_lost) {
+      fields.push(`date_lost = $${valueIndex++}`);
+      values.push(date_lost);
+    }
+    if (chronology) {
+      fields.push(`chronology = $${valueIndex++}`);
+      values.push(chronology);
+    }
+    if (status_handling) {
+      fields.push(`status_handling = $${valueIndex++}`);
+      values.push(status_handling);
+    }
+  
+    if (fields.length === 0) {
+      return response.status(400).json({ message: "No fields to update." });
+    }
+
+    values.push(id);
+    const query = `UPDATE lost_report_letter SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
+
+    pool.query(query, values, (error, results) => {
+      if (error) {
+        return response.status(500).json({ message: "Update failed.", error });
+      }
+      response.status(200).send(`SIK with ID: ${id} patched.`);
+    });
+  };
+
+
 const deleteSlk = (request, response) => {
   const id = parseInt(request.params.id)
 
@@ -66,5 +120,6 @@ export default {
   getSlkById,
   createSlk,
   updateSlk,
+  patchSik,
   deleteSlk,
 }

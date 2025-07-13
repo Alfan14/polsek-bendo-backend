@@ -10,6 +10,7 @@ router.get('/reports',db.getReports)
 router.get('/reports/:id', db.getReportById)
 router.post('/reports',db.createReport)
 router.put('/reports/:id', db.updateReport)
+router.patch('/reports/:id', db.patchReport)
 router.delete('/reports/:id',db.deleteReport)
 
 export default router;

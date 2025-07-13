@@ -51,6 +51,75 @@ const updateReport = (request, response) => {
   )
 }
 
+const patchReport = async (request, response) => {
+    const id = parseInt(request.params.id);
+    const { user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status } = request.body;
+
+    const fields = [];
+    const values = [];
+    let valueIndex = 1;
+
+     if (user_id) {
+      fields.push(`user_id = $${valueIndex++}`);
+      values.push(user_id);
+    }
+
+    if (complainant_name) {
+      fields.push(`complainant_name = $${valueIndex++}`);
+      values.push(complainant_name);
+    }
+    if (contact) {
+      fields.push(`contact = $${valueIndex++}`);
+      values.push(contact);
+    }
+    if (complainant_address) {
+      fields.push(`complainant_address = $${valueIndex++}`);
+      values.push(complainant_address);
+    }
+    if (complaint_category) {
+      fields.push(`complaint_category = $${valueIndex++}`);
+      values.push(complaint_category);
+    }
+    if (complaint_title) {
+      fields.push(`complaint_title = $${valueIndex++}`);
+      values.push(complaint_title);
+    }
+
+    if (complaint_content) {
+      fields.push(`complaint_content = $${valueIndex++}`);
+      values.push(complaint_content);
+    }
+    
+    if (proof) {
+      fields.push(`proof = $${valueIndex++}`);
+      values.push(proof);
+    }
+    
+    if (complaint_date) {
+      fields.push(`complaint_date = $${valueIndex++}`);
+      values.push(complaint_date);
+    }
+    
+    if (complaint_status) {
+      fields.push(`complaint_status = $${valueIndex++}`);
+      values.push(complaint_status);
+    }
+
+    if (fields.length === 0) {
+      return response.status(400).json({ message: "No fields to update." });
+    }
+
+    values.push(id);
+    const query = `UPDATE community_complaints SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
+
+    pool.query(query, values, (error, results) => {
+      if (error) {
+        return response.status(500).json({ message: "Update failed.", error });
+      }
+      response.status(200).send(`PM with ID: ${id} patched.`);
+    });
+  };
+
 const deleteReport = (request, response) => {
   const id = parseInt(request.params.id)
 
@@ -67,5 +136,6 @@ export default {
   getReportById,
   createReport,
   updateReport,
+  patchReport,
   deleteReport,
 }
