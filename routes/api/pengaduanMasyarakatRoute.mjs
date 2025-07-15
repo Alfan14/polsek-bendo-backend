@@ -6,11 +6,11 @@ const { authenticate, authorize } = authMiddleware
 
 const router = express.Router()
 
-router.get('/reports',db.getReports)
-router.get('/reports/:id', db.getReportById)
-router.post('/reports',db.createReport)
-router.put('/reports/:id', db.updateReport)
-router.patch('/reports/:id', db.patchReport)
-router.delete('/reports/:id',db.deleteReport)
+router.get('/pm',db.getpm)
+router.get('/pm/:id', db.getReportById)
+router.post('/pm',db.createReport)
+router.put('/pm/:id', db.updateReport)
+router.patch('/pm/:id', db.patchReport)
+router.delete('/pm/:id',db.deleteReport)
 
 export default router;
