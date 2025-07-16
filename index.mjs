@@ -15,6 +15,7 @@ import suratLaporanKehilanganRoutes from "./routes/api/suratLaporanKehilanganRou
 import suratIzinKeramaianRoutes from "./routes/api/suratIzinKeramaian.mjs";
 import pengaduanMasyarakatRoutes from "./routes/api/pengaduanMasyarakatRoute.mjs";
 import beritaRoutes from "./routes/api/beritaRoute.mjs";
+import noteRoutes from "./routes/api/noteRoutes.mjs";
 import cloudinaryController from "./controllers/cloudinaryController.mjs";
 
 import initChatHandler from "./sockets/initChatHandler.mjs";
@@ -72,6 +73,7 @@ app.use('/api/', skckRoutes);
 app.use('/api/', suratIzinKeramaianRoutes);
 app.use('/api/', suratLaporanKehilanganRoutes);
 app.use('/api/', beritaRoutes);
+app.use('/api/', noteRoutes);
 app.use('/api/', cloudinaryController);
 
 
