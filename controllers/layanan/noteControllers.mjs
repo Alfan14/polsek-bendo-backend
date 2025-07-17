@@ -21,11 +21,11 @@ const getNotesById = (request, response) => {
 }
 
 const createNotes = (request, response) => {
-  const { officer_id, officer_name, officer_note, date, time, related_field, correction_link } = request.body
+  const { user_id, officer_id, officer_name, officer_note, date, time, related_field, correction_link } = request.body
 
   pool.query(
-    'INSERT INTO notes (officer_id, officer_name, officer_note, date, time, related_field, correction_link) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-    [officer_id, officer_name, officer_note, date, time, related_field, correction_link],
+    'INSERT INTO notes (user_id, officer_id, officer_name, officer_note, date, time, related_field, correction_link) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+    [user_id, officer_id, officer_name, officer_note, date, time, related_field, correction_link],
     (error, results) => {
       if (error) {
         throw error;
@@ -36,10 +36,10 @@ const createNotes = (request, response) => {
 
 const updateNotes = (request, response) => {
   const id = parseInt(request.params.id)
-  const { officer_id, officer_name, officer_note, date, time, related_field, correction_link } = request.body
+  const { user_id, officer_id, officer_name, officer_note, date, time, related_field, correction_link } = request.body
 
   pool.query(
-    'UPDATE notes SET officer_id = $1, officer_name = $2, officer_note = $3, date = $4, time = $5, related_field = $6, correction_link = $7 WHERE id = $8',
+    'UPDATE notes SET officer_id = $1, officer_name = $2, officer_note = $3, date = $4, time = $5, related_field = $6, correction_link = $7, user_id = $8  WHERE id = $8',
     [officer_id, officer_name, officer_note, date, time, related_field, correction_link, id],
     (error, results) => {
       if (error) {
@@ -52,11 +52,16 @@ const updateNotes = (request, response) => {
 
 const patchNotes = async (request, response) => {
     const id = parseInt(request.params.id);
-    const { officer_id, officer_name, officer_note, date, time, related_field, correction_link } = request.body;
+    const { user_id, officer_id, officer_name, officer_note, date, time, related_field, correction_link } = request.body;
 
     const fields = [];
     const values = [];
     let valueIndex = 1;
+
+    if (user_id) {
+      fields.push(`user_id = $${valueIndex++}`);
+      values.push(user_id);
+    }
 
      if (officer_id) {
       fields.push(`officer_id = $${valueIndex++}`);
