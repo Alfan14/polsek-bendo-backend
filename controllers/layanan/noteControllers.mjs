@@ -62,7 +62,6 @@ const patchNotes = async (request, response) => {
       fields.push(`user_id = $${valueIndex++}`);
       values.push(user_id);
     }
-
      if (officer_id) {
       fields.push(`officer_id = $${valueIndex++}`);
       values.push(officer_id);
