@@ -29,7 +29,7 @@ const PORT = process.env.SERVER_PORT || 5000;
 const app = express();
 
 app.use(cors({
-  origin: process.env.PROD_ORIGIN, 
+  origin: [process.env.PROD_ORIGIN,process.env.ORIGIN], 
   credentials: true                
 }));
 
