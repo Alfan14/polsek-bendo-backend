@@ -33,9 +33,12 @@ const allowedOrigins = [process.env.PROD_ORIGIN, process.env.ORIGIN].filter(Bool
 
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log('CORS request from:', origin);
+
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error('Blocked by CORS:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
