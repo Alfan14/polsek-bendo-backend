@@ -6,6 +6,7 @@ import { createServer } from "http";
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 import path from "path";
+import helmet from "helmet";
 
 // route
 import authRoutes from './routes/api/authRoutes.mjs';
@@ -28,38 +29,23 @@ dotenv.config();
 const PORT = process.env.SERVER_PORT || 5000;
 const app = express();
 
-app.use(cors({
-  origin: [process.env.PROD_ORIGIN,process.env.ORIGIN], 
+const allowedOrigins = [process.env.PROD_ORIGIN, process.env.ORIGIN].filter(Boolean);
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true                
-}));
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-// const allowedOrigins = [process.env.ORIGIN, process.env.PROD_ORIGIN];
-
-// const corsOptions = {
-//   origin: [process.env.ORIGIN, process.env.PROD_ORIGIN],
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization', 'session-id'],
-//   credentials: true,
-// };
-
-//console.log('Allowed origins:', allowedOrigins);
-
-// app.use(cors(corsOptions));
-// app.options('*', cors(corsOptions));
-
-// const httpServer = createServer(app);
-// const io = new Server(httpServer, {
-//   path: "/socket.io",
-//   cors: {
-//     origin: [process.env.ORIGIN, process.env.PROD_ORIGIN],
-//     methods: ['GET', 'POST'],
-//     credentials: true,
-//   },
-// });
-// console.log("Initializing chat handler...");
-// initChatHandler(io);
+app.use(cors(corsOptions));
+app.use(helmet());
 
 // Middleware
 
