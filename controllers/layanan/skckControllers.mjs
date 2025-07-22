@@ -58,11 +58,10 @@ const patchOfficerSkck = async (request, response) => {
     const values = [];
     let valueIndex = 1;
 
-     if (applicant_name) {
+    if (applicant_name) {
       fields.push(`applicant_name = $${valueIndex++}`);
       values.push(applicant_name);
     }
-
     if (place_date_birth) {
       fields.push(`place_date_birth = $${valueIndex++}`);
       values.push(place_date_birth);
