@@ -53,7 +53,7 @@ const updateSik = (request, response) => {
 
 const patchSik = async (request, response) => {
     const id = parseInt(request.params.id);
-    const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees, form_creation } = request.body;
+    const { organizer_name, event_name, event_description, event_start, event_end, location, guest_estimate, levy_fees, form_creation , status_handling } = request.body;
 
     const fields = [];
     const values = [];
@@ -91,13 +91,17 @@ const patchSik = async (request, response) => {
       fields.push(`form_creation = $${valueIndex++}`);
       values.push(form_creation);
     }
+    if (status_handling) {
+      fields.push(`status_handling = $${valueIndex++}`);
+      values.push(status_handling);
+    }
   
     if (fields.length === 0) {
       return response.status(400).json({ message: "No fields to update." });
     }
 
     values.push(id);
-    const query = `UPDATE scrowd_permit_letter SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
+    const query = `UPDATE crowd_permit_letter SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
 
     pool.query(query, values, (error, results) => {
       if (error) {
@@ -110,7 +114,7 @@ const patchSik = async (request, response) => {
 const deleteSik = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM crowd_permit_letter WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM rowd_permit_letter WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
