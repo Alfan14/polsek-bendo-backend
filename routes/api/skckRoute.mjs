@@ -11,7 +11,7 @@ router.get('/skck/:id', db.getSkckById)
 router.post('/skck',db.createSkck)
 router.put('/skck/:id', db.updateSkck)
 router.put('/skck/officer/:id', db.updateSkckOfficer)
-router.patch('/skck/officer/:id', db.patchSkck)
+router.patch('/skck/officer/:id', db.patchOfficerSkck)
 router.delete('/skck/:id',db.deleteSkck)
 
 export default router;

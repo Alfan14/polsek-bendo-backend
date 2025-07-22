@@ -50,7 +50,7 @@ const updateSkck = (request, response) => {
   )
 }
 
-const patchSkck = async (request, response) => {
+const patchOfficerSkck = async (request, response) => {
     const id = parseInt(request.params.id);
     const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo } = request.body;
 
@@ -147,6 +147,6 @@ export default {
   createSkck,
   updateSkck,
   updateSkckOfficer,
-  patchSkck,
+  patchOfficerSkck,
   deleteSkck,
 }
