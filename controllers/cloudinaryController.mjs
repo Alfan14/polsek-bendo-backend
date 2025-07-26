@@ -1,16 +1,21 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import path from "path";
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
+import { fileURLToPath } from "url";
 
 dotenv.config(); 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router()
 
 cloudinary.config({
-  cloud_name: "dcnpu9qlr",
-  api_key: "671138926981391",
-  api_secret: "xYDw8K4vmB8JgWuoQ59X0Bgyjn0"
+  cloud_name: process.env.ALFAN_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key:  process.env.ALFAN_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret:  process.env.ALFAN_PUBLIC_CLOUDINARY_API_SECRET
 });
 
 const storage = multer.memoryStorage();
