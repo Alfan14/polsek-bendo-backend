@@ -22,17 +22,6 @@ const getSkckById = (request, response) => {
 }
 
 
-const getSkckByVerificationStatus = (request, response) => {
-  const { user_id } = request.params;
-
-  const result = await pool.query(`SELECT verification_status FROM skck WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`, [user_id]);
-
-  if (result.rows.length > 0) {
-    response.json({ status: result.rows[0].verification_status });
-  } else {
-    response.status(404).json({ message: 'No record found' });
-  }
-};
 
 const updateSkckVerificationStatusAdmin = (request, response) => {
   const { id } = req.params;
@@ -195,7 +184,6 @@ export default {
   downloadPdf ,
   getSkcks,
   getSkckById,
-  getSkckByVerificationStatus,
   updateSkckVerificationStatusAdmin,
   createSkck,
   updateSkck,
