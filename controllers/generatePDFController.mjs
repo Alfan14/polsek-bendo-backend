@@ -2,28 +2,41 @@ import express from 'express';
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import fs from 'fs/promises';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import dotenv from 'dotenv';
-import pool from "../db/index.mjs";
-import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(__filename);
 
-async function getBase64Image(filePathOrUrl) {
-    try {
-        if (isValidHttpUrl(filePathOrUrl)) {
-            const response = await axios.get(filePathOrUrl, { responseType: 'arraybuffer' });
-            const imageBuffer = Buffer.from(response.data, 'binary');
-            return imageBuffer.toString('base64');
-        } else {
-            const imageBuffer = await fs.readFile(filePathOrUrl);
-            return imageBuffer.toString('base64');
-        }
-    } catch (err) {
-        console.error(`Error getting image from ${filePathOrUrl}:`, err.message);
-        return 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    }
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
+
+function isValidHttpUrl(str) {
+  try {
+    const u = new URL(str);
+    return u.protocol === 'http:' || u.protocol === 'https:';
+  } catch {
+    return false;
+  }
 }
+
+export async function getBase64Image(filePathOrUrl) {
+  try {
+    if (isValidHttpUrl(filePathOrUrl)) {
+      const { data } = await axios.get(filePathOrUrl, { responseType: 'arraybuffer' });
+      return Buffer.from(data).toString('base64');
+    }
+
+    const buf = await fs.readFile(
+      path.isAbsolute(filePathOrUrl) ? filePathOrUrl : path.join(__dirname, filePathOrUrl)
+    );
+    return buf.toString('base64');
+
+  } catch (err) {
+    console.error(`Error getting image from ${filePathOrUrl}: ${err.message}`);
+    return 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  }
+}
+
 
 
 const generateSkckPDF =(async (skck) => {
