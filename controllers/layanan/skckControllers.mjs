@@ -21,8 +21,6 @@ const getSkckById = (request, response) => {
   })
 }
 
-
-
 const updateSkckVerificationStatusAdmin = (request, response) => {
   const { id } = req.params;
   const { verification_status } = req.body;
@@ -162,7 +160,7 @@ const deleteSkck = (request, response) => {
 const downloadPdf = (request, response) => {
   const { id } = request.params;
   try {
-    const result = await pool.query('SELECT * FROM skck WHERE id = $1', [id]);
+    const result = pool.query('SELECT * FROM skck WHERE id = $1', [id]);
     if (result.rows.length === 0) return res.status(404).send('SKCK not found');
 
     const skck = result.rows[0];
