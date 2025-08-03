@@ -237,10 +237,10 @@ const generateSkckPDF =(async (skck) => {
   `);
 
     const pdfBuffer = await page.pdf({ format: "A4" });
+    
     await browser.close();
     return pdfBuffer;
 });
-
 
 
 export default {
