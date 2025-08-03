@@ -1,0 +1,139 @@
+Not yet use Code :
+
+sendWhatsAppMessage(to, messageText) {
+  callWhatsAppCloudAPI({
+    to: to,
+    type: "text",
+    text: { body: messageText }
+  })
+}
+
+sendWhatsAppFile(to, fileUrl, caption) {
+  callWhatsAppCloudAPI({
+    to: to,
+    type: "document",
+    document: {
+      link: fileUrl,
+      caption: caption
+    }
+  })
+}
+
+onWhatsAppMessageReceived(request) {
+  const phoneNumber = request.from
+  const userMessage = request.body.message.text
+
+  session = redis.get(`skck_session:${phoneNumber}`)
+
+  if (!session) {
+    redis.set(`skck_session:${phoneNumber}`, { step: 'ask_name' }, ttl = 900)
+    sendWhatsAppMessage(phoneNumber, "Halo! Silakan masukkan nama lengkap Anda.")
+    return
+  }
+
+  switch (session.step) {
+    case 'ask_name':
+      redis.update(`skck_session:${phoneNumber}`, { applicant_name: userMessage, step: 'ask_nik' })
+      sendWhatsAppMessage(phoneNumber, "Terima kasih. Sekarang masukkan NIK Anda.")
+      break
+
+    case 'ask_nik':
+      redis.update(`skck_session:${phoneNumber}`, { nik: userMessage, step: 'ask_ttl' })
+      sendWhatsAppMessage(phoneNumber, "Masukkan Tempat, Tanggal Lahir Anda.")
+      break
+
+    case 'ask_ttl':
+      redis.update(`skck_session:${phoneNumber}`, { place_date_birth: userMessage, step: 'ask_address' })
+      sendWhatsAppMessage(phoneNumber, "Masukkan alamat lengkap Anda.")
+      break
+
+    case 'ask_address':
+      redis.update(`skck_session:${phoneNumber}`, { complete_address: userMessage, step: 'ask_reason' })
+      sendWhatsAppMessage(phoneNumber, "Apa alasan Anda membuat SKCK?")
+      break
+
+    case 'ask_picture':
+      redis.update(`skck_session:${phoneNumber}`, { passport_photo: userMessage, step: 'ask_reason' })
+      sendWhatsAppMessage(phoneNumber, "Apa alasan Anda membuat SKCK?")
+      break
+
+    case 'ask_needs':
+      redis.update(`skck_session:${phoneNumber}`, { needs: userMessage, step: 'generate_file' })
+
+      data = redis.get(`skck_session:${phoneNumber}`)
+
+      fileUrl = generateAndUploadSKCK(data)
+
+      saveToPostgres(phoneNumber, data, fileUrl)
+
+      sendWhatsAppFile(phoneNumber, fileUrl, "Berikut SKCK Anda.")
+
+      redis.delete(`skck_session:${phoneNumber}`)
+      break
+
+    default:
+      sendWhatsAppMessage(phoneNumber, "Sesi tidak valid. Ketik /start untuk memulai ulang.")
+      redis.delete(`skck_session:${phoneNumber}`)
+  }
+}
+
+
+// post messages mock_WAC_fake :
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config()
+
+const app = express();
+const PORT = process.env.PORT || 5001;
+const SESSION_SECRET = process.env.SESSION_SECRET;
+const REDIS_HOST = process.env.REDIS_HOST;
+const REDIS_PORT = parseInt(process.env.REDIS_PORT, 10);
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
+
+const redisClient = createClient({
+    url: `redis://default:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`
+});
+
+redisClient.on('connect', () => {
+    console.log('Connected to Redis...');
+});
+
+redisClient.on('error', (err) => {
+    console.error('Redis error:', err);
+    process.exit(1);
+});
+
+(async () => {
+    await redisClient.connect();
+})();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json()); 
+
+app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: SESSION_SECRET, 
+    resave: false, 
+    saveUninitialized: false, 
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true, 
+        maxAge: 1000 * 60 * 60 * 24 
+    }
+}));
+
+// Routes
+app.get('/', (req, res) => {
+    res.send(`
+        <h1>Welcome to Redis Express App!</h1>
+        <p>Explore these features:</p>
+        <ul>
+            <li><a href="/register/step1">Multi-step Registration Form (Session Management)</a></li>
+            <li><a href="/data">Cached API Response Example</a></li>
+        </ul>
+    `);
+});

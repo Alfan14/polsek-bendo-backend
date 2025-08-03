@@ -50,8 +50,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(helmet());
 
-// Middleware
-
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.text());
@@ -66,7 +64,6 @@ app.use('/api/', suratLaporanKehilanganRoutes);
 app.use('/api/', beritaRoutes);
 app.use('/api/', noteRoutes);
 app.use('/api/', cloudinaryController);
-
 
 // Auth Routes
 app.use('/auth/', authRoutes);

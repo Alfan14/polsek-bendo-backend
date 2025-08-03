@@ -1,3 +1,4 @@
+import gpc from "../generatePDFController.mjs";
 import pool from "../../db/index.mjs";
 
 const getSkcks = (async (request, response) => {
@@ -19,6 +20,35 @@ const getSkckById = (request, response) => {
     response.status(200).json(results.rows)
   })
 }
+
+
+const getSkckByVerificationStatus = (request, response) => {
+  const { user_id } = request.params;
+
+  const result = await pool.query(`SELECT verification_status FROM skck WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`, [user_id]);
+
+  if (result.rows.length > 0) {
+    response.json({ status: result.rows[0].verification_status });
+  } else {
+    response.status(404).json({ message: 'No record found' });
+  }
+};
+
+const updateSkckVerificationStatusAdmin = (request, response) => {
+  const { id } = req.params;
+  const { verification_status } = req.body;
+  try {
+    await pool.query('UPDATE skck SET verification_status = $1 WHERE id = $2', [
+      verification_status,
+      id
+    ]);
+    res.json({ message: 'Verification status updated' });
+  } catch (error) {
+    console.error('Error updating status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 const createSkck = (request, response) => {
   const { user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo} = request.body
@@ -140,9 +170,33 @@ const deleteSkck = (request, response) => {
   })
 }
 
+const downloadPdf = (request, response) => {
+  const { id } = request.params;
+  try {
+    const result = await pool.query('SELECT * FROM skck WHERE id = $1', [id]);
+    if (result.rows.length === 0) return res.status(404).send('SKCK not found');
+
+    const skck = result.rows[0];
+    const pdfBuffer = await gpc.generateSkckPDF(skck);
+
+    response.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=skck_${id}.pdf`
+    });
+    response.send(pdfBuffer);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 export default {
+  downloadPdf ,
   getSkcks,
   getSkckById,
+  getSkckByVerificationStatus,
+  updateSkckVerificationStatusAdmin,
   createSkck,
   updateSkck,
   updateSkckOfficer,
