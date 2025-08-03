@@ -1,8 +1,8 @@
 import puppeteer from "puppeteer";
 import path from "path";
 
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 async function getBase64Image(filePathOrUrl) {
     try {
         if (isValidHttpUrl(filePathOrUrl)) {
