@@ -27,7 +27,7 @@ const updateSkckVerificationStatusAdmin = (request, response) => {
   const { id } = req.params;
   const { verification_status } = req.body;
   try {
-    await pool.query('UPDATE skck SET verification_status = $1 WHERE id = $2', [
+      pool.query('UPDATE skck SET verification_status = $1 WHERE id = $2', [
       verification_status,
       id
     ]);
