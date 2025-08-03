@@ -13,7 +13,7 @@ router.put('/skck/:id', db.updateSkck);
 router.put('/skck/officer/:id', db.updateSkckOfficer);
 router.patch('/skck/officer/:id', db.patchOfficerSkck);
 router.delete('/skck/:id',db.deleteSkck);
-router.put('/status/:id', db.updateSkckVerificationStatusAdmin);
-router.get('/pdf/:id', db.downloadPdf);
+router.put('/skck/status/:id', db.updateSkckVerificationStatusAdmin);
+router.get('/skck/pdf/:id', db.downloadPdf);
 
 export default router;
