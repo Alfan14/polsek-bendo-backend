@@ -164,7 +164,7 @@ const downloadPdf = (request, response) => {
     if (result.rows.length === 0) return res.status(404).send('SKCK not found');
 
     const skck = result.rows[0];
-    const pdfBuffer = await gpc.generateSkckPDF(skck);
+    const pdfBuffer = gpc.generateSkckPDF(skck);
 
     response.set({
       'Content-Type': 'application/pdf',
