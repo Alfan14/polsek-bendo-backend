@@ -1,4 +1,6 @@
-const puppeteer = require("puppeteer");
+import puppeteer from "puppeteer";
+import path from "path";
+
 const __dirname = path.dirname(__filename);
 
 async function getBase64Image(filePathOrUrl) {
