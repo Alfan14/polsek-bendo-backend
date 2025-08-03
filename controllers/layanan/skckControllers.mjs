@@ -1,5 +1,16 @@
 import gpc from "../generatePDFController.mjs";
 import pool from "../../db/index.mjs";
+import { v2 as cloudinary } from 'cloudinary';
+import { Readable } from 'stream';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.ALFAN_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.ALFAN_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: process.env.ALFAN_PUBLIC_CLOUDINARY_API_SECRET,
+});
 
 const getSkcks = (async (request, response) => {
   pool.query('SELECT * FROM skck ORDER BY id ASC', (error, results) => {
@@ -22,20 +33,19 @@ const getSkckById = (request, response) => {
 }
 
 const updateSkckVerificationStatusAdmin = (request, response) => {
-  const { id } = req.params;
+  const { id } = request.params;
   const { verification_status } = req.body;
   try {
       pool.query('UPDATE skck SET verification_status = $1 WHERE id = $2', [
       verification_status,
       id
     ]);
-    res.json({ message: 'Verification status updated' });
+    response.json({ message: 'Verification status updated' });
   } catch (error) {
     console.error('Error updating status:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    response.status(500).json({ error: 'Internal server error' });
   }
 };
-
 
 const createSkck = (request, response) => {
   const { user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo} = request.body
@@ -157,25 +167,48 @@ const deleteSkck = (request, response) => {
   })
 }
 
-const downloadPdf = (request, response) => {
+const downloadPdf =  (request, response) => {
   const { id } = request.params;
+
   try {
     const result = pool.query('SELECT * FROM skck WHERE id = $1', [id]);
-    if (result.rows.length === 0) return res.status(404).send('SKCK not found');
+
+    if (result.rows.length === 0) {
+      return response.status(404).send('SKCK not found');
+    }
 
     const skck = result.rows[0];
-    const pdfBuffer = gpc.generateSkckPDF(skck);
 
-    response.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename=skck_${id}.pdf`
+    const pdfBuffer = gpc.generateSkckPdf({
+      body: [{ skck_details: skck }],
     });
+
+    const cloudResult = new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: 'raw',
+          public_id: `skck_${id}`,
+          folder: 'skck_pdfs',
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+      Readable.from(pdfBuffer).pipe(stream);
+    });
+
+    response.setHeader('Content-Type', 'application/pdf');
+    response.setHeader('Content-Disposition', `attachment; filename=skck_${id}.pdf`);
     response.send(pdfBuffer);
+
+    console.log('PDF uploaded to:', cloudResult.secure_url);
   } catch (error) {
     console.error('Error generating PDF:', error);
     response.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 export default {
