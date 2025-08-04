@@ -179,9 +179,13 @@ const downloadPdf =  (request, response) => {
 
     const skck = result.rows[0];
 
+    console.log("Isi Skck:",skck);
+
     const pdfBuffer = gpc.generateSkckPdf({
       body: [{ skck_details: skck }],
     });
+
+    console.log("Isi Pdf Buffer:",pdfBuffer);
 
     const cloudResult = new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
@@ -197,6 +201,8 @@ const downloadPdf =  (request, response) => {
       );
       Readable.from(pdfBuffer).pipe(stream);
     });
+
+    console.log("Isi cloud Result:",cloudResult);
 
     response.setHeader('Content-Type', 'application/pdf');
     response.setHeader('Content-Disposition', `attachment; filename=skck_${id}.pdf`);
