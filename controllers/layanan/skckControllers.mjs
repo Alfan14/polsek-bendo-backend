@@ -168,26 +168,23 @@ const deleteSkck = (request, response) => {
 }
 
 const downloadPdf =  (request, response) => {
-  const { id } = request.params;
+  const { id } = req.params;
 
   try {
-    const result = pool.query('SELECT * FROM skck WHERE id = $1', [id]);
-
+    const result = await pool.query('SELECT * FROM skck WHERE id = $1', [id]);
     if (result.rows.length === 0) {
-      return response.status(404).send('SKCK not found');
+      return res.status(404).json({ error: 'SKCK not found' });
     }
 
     const skck = result.rows[0];
 
-    console.log("Isi Skck:",skck);
+    if (skck.pdf_url) {
+      return res.json({ url: skck.pdf_url });
+    }
 
-    const pdfBuffer = gpc.generateSkckPdf({
-      body: [{ skck_details: skck }],
-    });
+    const pdfBuffer = await generateSkckPdf(skck);
 
-    console.log("Isi Pdf Buffer:",pdfBuffer);
-
-    const cloudResult = new Promise((resolve, reject) => {
+    const cloudResult = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
           resource_type: 'raw',
@@ -202,16 +199,15 @@ const downloadPdf =  (request, response) => {
       Readable.from(pdfBuffer).pipe(stream);
     });
 
-    console.log("Isi cloud Result:",cloudResult);
+    await pool.query('UPDATE skck SET pdf_url = $1 WHERE id = $2', [
+      cloudResult.secure_url,
+      id
+    ]);
 
-    response.setHeader('Content-Type', 'application/pdf');
-    response.setHeader('Content-Disposition', `attachment; filename=skck_${id}.pdf`);
-    response.send(pdfBuffer);
-
-    console.log('PDF uploaded to:', cloudResult.secure_url);
+    res.json({ url: cloudResult.secure_url });
   } catch (error) {
     console.error('Error generating PDF:', error);
-    response.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
