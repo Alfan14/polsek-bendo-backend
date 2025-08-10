@@ -1,4 +1,4 @@
-import generateSkckPdf from "../generatePDFController.mjs";
+import generateSkckPdfModule from "../generatePDFController.mjs";
 import pool from "../../db/index.mjs";
 import { v2 as cloudinary } from 'cloudinary';
 import { Readable } from 'stream';
@@ -178,7 +178,7 @@ const downloadPdf = async (request, response) => {
 
     const skck = result.rows[0];
 
-    const pdfBuffer = await generateSkckPdf(skck);
+    const pdfBuffer = await generateSkckPdfModule.generateSkckPdf(skck);
 
     response.setHeader("Content-Type", "application/pdf");
     response.setHeader(
