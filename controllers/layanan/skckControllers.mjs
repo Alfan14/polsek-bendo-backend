@@ -48,11 +48,11 @@ const updateSkckVerificationStatusAdmin = (request, response) => {
 };
 
 const createSkck = (request, response) => {
-  const { user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo } = request.body
+  const { user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, sex, nationality, religion, passport_photo } = request.body
 
   pool.query(
-    'INSERT INTO skck ( user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes , passport_photo) VALUES ($1, $2, $3, $4, $5, $6, $7 , $8, $9, $10)',
-    [user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo],
+    'INSERT INTO skck ( user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, sex, nationality, religion, passport_photo) VALUES ($1, $2, $3, $4, $5, $6, $7 , $8, $9, $10, $11, $12)',
+    [user_id, applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, sex, nationality, religion, passport_photo],
     (error, results) => {
       if (error) {
         throw error;
@@ -63,11 +63,11 @@ const createSkck = (request, response) => {
 
 const updateSkck = (request, response) => {
   const id = parseInt(request.params.id)
-  const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo } = request.body
+  const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, sex, nationality, religion,  passport_photo } = request.body
 
   pool.query(
-    'UPDATE skck SET applicant_name = $1, place_date_birth = $2, complete_address = $3, needs = $4, id_number = $5, submission_date = $6, verification_status = $7, officer_notes = $8 passport_photo = $9 WHERE id = $10',
-    [applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo, id],
+    'UPDATE skck SET applicant_name = $1, place_date_birth = $2, complete_address = $3, needs = $4, id_number = $5, submission_date = $6, verification_status = $7, sex = $8, nationality = $9, religion = $10, passport_photo = $11 WHERE id = $12',
+    [applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, sex, nationality, religion, passport_photo, id],
     (error, results) => {
       if (error) {
         throw error
@@ -79,7 +79,7 @@ const updateSkck = (request, response) => {
 
 const patchOfficerSkck = async (request, response) => {
   const id = parseInt(request.params.id);
-  const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, officer_notes, passport_photo } = request.body;
+  const { applicant_name, place_date_birth, complete_address, needs, id_number, submission_date, verification_status, sex, nationality, religion, passport_photo } = request.body;
 
   const fields = [];
   const values = [];
@@ -115,9 +115,19 @@ const patchOfficerSkck = async (request, response) => {
     values.push(verification_status);
   }
 
-  if (officer_notes) {
-    fields.push(`officer_notes = $${valueIndex++}`);
-    values.push(officer_notes);
+  if (sex) {
+    fields.push(`sex = $${valueIndex++}`);
+    values.push(sex);
+  }
+
+  if (nationality) {
+    fields.push(`nationality = $${valueIndex++}`);
+    values.push(nationality);
+  }
+
+  if (religion) {
+    fields.push(`religion = $${valueIndex++}`);
+    values.push(religion);
   }
 
   if (passport_photo) {
