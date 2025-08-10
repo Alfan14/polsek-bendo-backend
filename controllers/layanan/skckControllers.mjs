@@ -171,7 +171,7 @@ const downloadPdf =  (request, response) => {
   const { id } = req.params;
 
   try {
-    const result = await pool.query('SELECT * FROM skck WHERE id = $1', [id]);
+    const result = pool.query('SELECT * FROM skck WHERE id = $1', [id]);
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'SKCK not found' });
     }
@@ -182,9 +182,9 @@ const downloadPdf =  (request, response) => {
       return res.json({ url: skck.pdf_url });
     }
 
-    const pdfBuffer = await generateSkckPdf(skck);
+    const pdfBuffer =  generateSkckPdf(skck);
 
-    const cloudResult = await new Promise((resolve, reject) => {
+    const cloudResult =  new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
           resource_type: 'raw',
@@ -199,7 +199,7 @@ const downloadPdf =  (request, response) => {
       Readable.from(pdfBuffer).pipe(stream);
     });
 
-    await pool.query('UPDATE skck SET pdf_url = $1 WHERE id = $2', [
+     pool.query('UPDATE skck SET pdf_url = $1 WHERE id = $2', [
       cloudResult.secure_url,
       id
     ]);
