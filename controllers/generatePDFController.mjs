@@ -37,9 +37,7 @@ export async function getBase64Image(filePathOrUrl) {
   }
 }
 
-
-
-const generateSkckPDF =(async (skck) => {
+const generateSkckPdf = async (skck) => {
 
     const polriEmblemBase64 = await getBase64Image('public/Lambang_Polri.png');
     const browser = await puppeteer.launch();
@@ -108,7 +106,7 @@ const generateSkckPDF =(async (skck) => {
             <body>
             <div id="skck_document" class="skck-container">
                 <img src="data:image/png;base64,${polriEmblemBase64}" alt="Polri Emblem Watermark" class="polri-watermark">
-            <div key="${index}" class="relative z-10">
+            <div class="relative z-10">
                     <div class="text-center mb-6">
                         <p class="text-lg font-bold">KEPOLISIAN NEGARA REPUBLIK INDONESIA</p>
                         <p class="text-md">RESOR KABUPATEN MAGETAN</p>
@@ -259,9 +257,7 @@ const generateSkckPDF =(async (skck) => {
     
     await browser.close();
     return pdfBuffer;
-});
+};
 
 
-export default {
-    generateSkckPDF
-}
+export default {generateSkckPdf};
