@@ -11,7 +11,7 @@ router.get('/slk/:id', db.getSlkById);
 router.get('/slk/pdf/:id', db.downloadPdf);
 router.post('/slk',db.createSlk);
 router.put('/slk/:id', db.updateSlk);
-router.put('/sik/status/:id', db.updateSlkVerificationStatusAdmin);
+router.put('/slk/status/:id', db.updateSlkVerificationStatusAdmin);
 router.patch('/slk/:id', db.patchSik);
 router.delete('/slk/:id',db.deleteSlk);
 
