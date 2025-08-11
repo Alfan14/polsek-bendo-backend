@@ -41,6 +41,24 @@ const generateSkckPdf = async (skck, skckOfficer) => {
     const polriEmblemBase64 = await getBase64Image('public/Lambang_Polri.png');
     const applicantPhotoBase64 = await getBase64Image(skck.passport_photo);
 
+     const submissionDate = new Date(skck.submission_date);
+
+    const expirationDate = new Date(submissionDate);
+    
+    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+    const formattedSubmissionDate = submissionDate.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+    
+    const formattedExpirationDate = expirationDate.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
     const browser = await puppeteer.launch({
         headless: "new",
         args: [
@@ -241,8 +259,8 @@ const generateSkckPdf = async (skck, skckOfficer) => {
                         <p>the bearer hereof proves not to be involved in any criminal cases</p>
                         <p class="mt-4">selama ia berada di Indonesia dari <span class="data-value">27 Juli 2025</span></p>
                         <p>during his/her stay in Indonesia from <span class="data-value">27 Juli 2025</span></p>
-                        <p>sampai dengan <span class="data-value">27 Juli 2026</span></p>
-                        <p>until <span class="data-value">27 Juli 2026</span></p>
+                        <p>sampai dengan <span class="data-value">${formattedExpirationDate}</span></p>
+                        <p>until <span class="data-value">${formattedExpirationDate}</span></p>
                     </div>
 
                     <div class="mb-6">
@@ -257,16 +275,16 @@ const generateSkckPdf = async (skck, skckOfficer) => {
                             <div><span class="data-value">: ${skck.needs}</span></div>
 
                             <div><span class="data-label">Berlaku dari tanggal</span></div>
-                            <div><span class="data-value">: ${new Date(skck.submission_date).toDateString()}</span></div>
+                            <div><span class="data-value">: ${formattedSubmissionDate}</span></div>
 
                             <div><span class="data-label">Valid from</span></div>
-                            <div><span class="data-value">: ${new Date(skck.submission_date).toDateString()}</span></div>
+                            <div><span class="data-value">: ${formattedSubmissionDate}</span></div>
 
                             <div><span class="data-label">Sampai dengan</span></div>
-                            <div><span class="data-value">: 27 Juli 2026</span></div>
+                            <div><span class="data-value">:${formattedExpirationDate}</span></div>
 
                             <div><span class="data-label">To</span></div>
-                            <div><span class="data-value">: 27 Juli 2026</span></div>
+                            <div><span class="data-value">: ${formattedExpirationDate}</span></div>
                         </div>
                     </div>
 
@@ -277,8 +295,8 @@ const generateSkckPdf = async (skck, skckOfficer) => {
                         <div class="text-center">
                             <p>Dikeluarkan di : Bendo</p>
                             <p>Issued in : Bendo</p>
-                            <p>Pada tanggal : ${new Date(skck.submission_date).toDateString()}</p>
-                            <p>On : ${new Date(skck.submission_date).toDateString()}</p>
+                            <p>Pada tanggal : ${formattedSubmissionDate}</p>
+                            <p>On : ${formattedSubmissionDate}</p>
                             <p class="mt-4 font-bold">KEPALA KEPOLISIAN SEKTOR BENDO</p>
                             <div class="h-20 w-48 border-b-2 border-gray-400 mx-auto mt-4"></div>
                             <p class="mt-2 text-sm">${skckOfficer.username}</p>
