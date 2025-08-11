@@ -23,11 +23,11 @@ const getReportById = (request, response) => {
 }
 
 const createReport = (request, response) => {
-  const { user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status } = request.body
+  const { user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status, complainant_job, complainant_religion, complainant_nationality, complainant_loss, sex } = request.body
 
   pool.query(
-    'INSERT INTO community_complaints (user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-    [user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status],
+    'INSERT INTO community_complaints (user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
+    [user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status complainant_job, complainant_religion, complainant_nationality, complainant_loss, sex],
     (error, results) => {
       if (error) {
         throw error;
@@ -74,7 +74,7 @@ const updateReport = (request, response) => {
 
 const patchReport = async (request, response) => {
     const id = parseInt(request.params.id);
-    const { user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status } = request.body;
+    const { user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status , complainant_job, complainant_religion, complainant_nationality, complainant_loss, sex } = request.body;
 
     const fields = [];
     const values = [];
@@ -89,6 +89,7 @@ const patchReport = async (request, response) => {
       fields.push(`complainant_name = $${valueIndex++}`);
       values.push(complainant_name);
     }
+
     if (contact) {
       fields.push(`contact = $${valueIndex++}`);
       values.push(contact);
@@ -110,7 +111,27 @@ const patchReport = async (request, response) => {
       fields.push(`complaint_content = $${valueIndex++}`);
       values.push(complaint_content);
     }
-    
+
+    if (complainant_job) {
+      fields.push(`complainant_job = $${valueIndex++}`);
+      values.push(complainant_job);
+    }
+
+    if (complainant_religion) {
+      fields.push(`complainant_religion = $${valueIndex++}`);
+      values.push(complainant_religion);
+    }
+
+    if (complainant_nationality) {
+      fields.push(`complainant_nationality = $${valueIndex++}`);
+      values.push(complainant_nationality);
+    }
+
+    if (complainant_loss) {
+      fields.push(`complainant_loss = $${valueIndex++}`);
+      values.push(complainant_loss);
+    }
+
     if (proof) {
       fields.push(`proof = $${valueIndex++}`);
       values.push(proof);

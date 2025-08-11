@@ -23,11 +23,11 @@ const getSlkById = (request, response) => {
 }
 
 const createSlk = (request, response) => {
-  const { user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling } = request.body
+  const { user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling, religion, job, address} = request.body
 
   pool.query(
-    'INSERT INTO lost_report_letter (user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-    [user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling],
+    'INSERT INTO lost_report_letter (user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling, religion, job, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+    [user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling, religion, job, address],
     (error, results) => {
       if (error) {
         throw error;
@@ -74,7 +74,7 @@ const updateSlk = (request, response) => {
 
 const patchSik = async (request, response) => {
     const id = parseInt(request.params.id);
-    const { user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling } = request.body;
+    const { user_id, reporter_name, contact_reporter, item_type, date_lost,  chronology, status_handling, religion, job, address} = request.body;
 
     const fields = [];
     const values = [];
@@ -107,6 +107,18 @@ const patchSik = async (request, response) => {
     if (status_handling) {
       fields.push(`status_handling = $${valueIndex++}`);
       values.push(status_handling);
+    }
+    if (job) {
+      fields.push(`job = $${valueIndex++}`);
+      values.push(job);
+    }
+    if (religion) {
+      fields.push(`religion = $${valueIndex++}`);
+      values.push(religion);
+    }
+    if (address) {
+      fields.push(`address = $${valueIndex++}`);
+      values.push(address);
     }
   
     if (fields.length === 0) {
