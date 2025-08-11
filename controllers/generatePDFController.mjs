@@ -33,7 +33,6 @@ export async function getBase64Image(filePathOrUrl) {
 
     } catch (err) {
         console.error(`Error getting image from ${filePathOrUrl}: ${err.message}`);
-        // Return a 1x1 transparent GIF to prevent broken image icons
         return 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     }
 }
@@ -174,10 +173,11 @@ const generateSkckPdf = async (skck, skckOfficer) => {
                         <div><span class="data-value">: ${skck.applicant_name}</span></div>
                         
                         <div><span class="data-label">Jenis Kelamin</span></div>
-                        <div><span class="data-value">: ${skck.sex === "men" ? "Laki-Laki" : "Perempuan"}</span></div>
+                        <div><span class="data-value">: ${skck.sex === "male" ? "Laki-Laki" : "Perempuan"}</span></div>
 
                         <div><span class="data-label">Sex</span></div>
-                        <div><span class="data-value">: ${skck.sex === "men" ? "Men" : "Women"}</span></div>
+                        <div><span class="data-value">: ${skck.sex === "male" ? "Men" : "Women"}</span></div>
+                        
 
                         <div><span class="data-label">Kebangsaan</span></div>
                         <div><span class="data-value">: ${skck.nationality}</span></div>
