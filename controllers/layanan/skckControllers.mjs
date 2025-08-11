@@ -35,9 +35,12 @@ const getSkckById = (request, response) => {
 const updateSkckVerificationStatusAdmin = (request, response) => {
   const { id } = request.params;
   const { verification_status } = request.body;
+  const { officer_in_charge } = request.body;
+
   try {
-    pool.query('UPDATE skck SET verification_status = $1 WHERE id = $2', [
+    pool.query('UPDATE skck SET verification_status = $1 , officer_in_charge = $2 WHERE id = $3', [
       verification_status,
+      officer_in_charge,
       id
     ]);
     response.json({ message: 'Verification status updated' });
