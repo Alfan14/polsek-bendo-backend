@@ -184,26 +184,37 @@ const downloadPdf = async (request, response) => {
   const { id } = request.params;
 
   try {
-    const result = await pool.query("SELECT * FROM skck WHERE id = $1", [id]);
-    if (result.rows.length === 0) {
+    const skckData = await pool.query("SELECT * FROM skck WHERE id = $1", [id]);
+    if (skckData.rows.length === 0) {
       return response.status(404).json({ error: "SKCK not found" });
     }
+    const skck = skckData.rows[0];
 
-    const skck = result.rows[0];
+    const usersData = await pool.query("SELECT * FROM users WHERE id = $1", [
+      skck.officer_in_charge,
+    ]);
+    if (usersData.rows.length === 0) {
+      return response.status(404).json({ error: "Officer not found" });
+    }
+    const skckOfficer = usersData.rows[0];
 
-    const pdfBuffer = await generateSkckPdfModule.generateSkckPdf(skck);
+    const pdfBuffer = await generateSkckPdfModule.generateSkckPdf(
+      skck,
+      skckOfficer
+    );
 
     response.setHeader("Content-Type", "application/pdf");
     response.setHeader(
       "Content-Disposition",
       `attachment; filename=skck_${id}.pdf`
     );
-    response.send(pdfBuffer); 
+    response.send(pdfBuffer);
   } catch (error) {
     console.error("Error generating PDF:", error);
     response.status(500).json({ error: "Failed to generate PDF" });
   }
 };
+
 
 
 export default {

@@ -38,12 +38,12 @@ export async function getBase64Image(filePathOrUrl) {
     }
 }
 
-const generateSkckPdf = async (skck) => {
+const generateSkckPdf = async (skck, skckOfficer) => {
     // Correctly get the base64 string for the Polri emblem
     const polriEmblemBase64 = await getBase64Image('public/Lambang_Polri.png');
     // Correctly get the base64 string for the applicant's photo from the URL
-    const applicantPhotoBase64 = await getBase64Image(skck.photo_url);
-    
+    const applicantPhotoBase64 = await getBase64Image(skck.passport_photo);
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -165,24 +165,24 @@ const generateSkckPdf = async (skck) => {
 
                         <div><span class="data-label">Name</span></div>
                         <div><span class="data-value">: ${skck.applicant_name}</span></div>
-
+                        
                         <div><span class="data-label">Jenis Kelamin</span></div>
-                        <div><span class="data-value">: Laki-laki</span></div>
+                        <div><span class="data-value">: ${skck.sex === "men" ? "Laki-Laki" : "Perempuan"}</span></div>
 
                         <div><span class="data-label">Sex</span></div>
-                        <div><span class="data-value">: Male</span></div>
+                        <div><span class="data-value">: ${skck.sex === "men" ? "Men" : "Women"}</span></div>
 
                         <div><span class="data-label">Kebangsaan</span></div>
-                        <div><span class="data-value">: Indonesia</span></div>
+                        <div><span class="data-value">: ${skck.nationality}</span></div>
 
                         <div><span class="data-label">Nationality</span></div>
-                        <div><span class="data-value">: Indonesia</span></div>
+                        <div><span class="data-value">: ${skck.nationality}</span></div>
 
                         <div><span class="data-label">Agama</span></div>
-                        <div><span class="data-value">: Islam</span></div>
+                        <div><span class="data-value">: ${skck.religion}</span></div>
 
                         <div><span class="data-label">Religion</span></div>
-                        <div><span class="data-value">: Islam</span></div>
+                        <div><span class="data-value">: ${skck.religion}</span></div>
 
                         <div><span class="data-label">Tempat dan tgl. lahir</span></div>
                         <div><span class="data-value">: ${skck.place_date_birth}</span></div>
@@ -219,7 +219,7 @@ const generateSkckPdf = async (skck) => {
 
                         <div><span class="data-label">Fingerprints FORMULA</span></div>
                         <div><span class="data-value">: 31.114 - III</span></div>
-                    </div>
+                    </div >
 
                     <div class="mb-6">
                         <p>Setelah diadakan penelitian hingga saat dikeluarkan surat keterangan ini yang didasarkan kepada:</p>
@@ -270,18 +270,18 @@ const generateSkckPdf = async (skck) => {
                         <div class="text-center">
                             <p>Dikeluarkan di : Bendo</p>
                             <p>Issued in : Bendo</p>
-                            <p>Pada tanggal : 10 Juli 2025</p>
-                            <p>On : 10 Juli 2025</p>
+                            <p>Pada tanggal : ${new Date(skck.submission_date).toDateString()}</p>
+                            <p>On : ${new Date(skck.submission_date).toDateString()}</p>
                             <p class="mt-4 font-bold">KEPALA KEPOLISIAN SEKTOR BENDO</p>
                             <div class="h-20 w-48 border-b-2 border-gray-400 mx-auto mt-4"></div>
-                            <p class="mt-2 text-sm">( NAMA PEJABAT )</p>
-                            <p class="text-xs">NRP. XXXXXXXXXX</p>
+                            <p class="mt-2 text-sm">${skckOfficer.username}</p>
+                            <p class="text-xs">NRP.${skckOfficer.nrp}</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </body>
-        </html>
+                </div >
+            </div >
+        </body >
+        </html >
     `);
 
     const pdfBuffer = await page.pdf({ format: "A4" });
