@@ -46,6 +46,7 @@ const updateSlkVerificationStatusAdmin = (request, response) => {
     pool.query('UPDATE lost_report_letter SET status_handling = $1 , officer_in_charge = $2 WHERE id = $3', [
       status_handling,
       officer_in_charge,
+      id
     ]);
     response.json({ message: 'Verification status updated' });
   } catch (error) {
