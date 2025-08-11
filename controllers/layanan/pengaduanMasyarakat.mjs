@@ -26,8 +26,8 @@ const createReport = (request, response) => {
   const { user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status, complainant_job, complainant_religion, complainant_nationality, complainant_loss, sex } = request.body
 
   pool.query(
-    'INSERT INTO community_complaints (user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
-    [user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status , complainant_job, complainant_religion, complainant_nationality, complainant_loss, sex],
+    'INSERT INTO community_complaints (user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status, complainant_job, complainant_religion, complainant_nationality, complainant_loss, sex) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
+    [user_id, complainant_name, contact, complainant_address, complaint_category, complaint_title, complaint_content, proof, complaint_date, complaint_status, complainant_job, complainant_religion, complainant_nationality, complainant_loss, sex],
     (error, results) => {
       if (error) {
         throw error;
