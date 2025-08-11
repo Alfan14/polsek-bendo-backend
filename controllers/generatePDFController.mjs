@@ -39,15 +39,22 @@ export async function getBase64Image(filePathOrUrl) {
 }
 
 const generateSkckPdf = async (skck, skckOfficer) => {
-    // Correctly get the base64 string for the Polri emblem
     const polriEmblemBase64 = await getBase64Image('public/Lambang_Polri.png');
-    // Correctly get the base64 string for the applicant's photo from the URL
     const applicantPhotoBase64 = await getBase64Image(skck.passport_photo);
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--disable-software-rasterizer",
+        ],
+    });
+
     const page = await browser.newPage();
 
-    // Use a template literal to insert both base64 image strings
     await page.setContent(`
         <!DOCTYPE html>
         <html lang="en">
