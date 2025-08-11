@@ -318,7 +318,7 @@ const generateSkckPdf = async (skck, skckOfficer) => {
 
 const generateSikPdf = async (sik, sikOfficer) => {
     const polriEmblemBase64 = await getBase64Image('public/Lambang_Polri.png');
-    const applicantPhotoBase64 = await getBase64Image(sik.passport_photo);
+    // const applicantPhotoBase64 = await getBase64Image(sik.passport_photo);
 
     const submissionDate = new Date(sik.form_creation);
 
@@ -517,7 +517,7 @@ const generateSikPdf = async (sik, sikOfficer) => {
 
 const generateSlkPdf = async (slk, slkOfficer) => {
     const polriEmblemBase64 = await getBase64Image('public/Lambang_Polri.png');
-    const applicantPhotoBase64 = await getBase64Image(slk.passport_photo);
+    // const applicantPhotoBase64 = await getBase64Image(slk.passport_photo);
 
     const dateLost = new Date(slk.date_lost);
 
@@ -707,7 +707,7 @@ const generateSlkPdf = async (slk, slkOfficer) => {
 
 const generatePmPdf = async (pm, pmOfficer) => {
     const polriEmblemBase64 = await getBase64Image('public/Lambang_Polri.png');
-    const applicantPhotoBase64 = await getBase64Image(pm.passport_photo);
+    // const applicantPhotoBase64 = await getBase64Image(pm.passport_photo);
 
     const complaintDate = new Date(pm.complaint_date);
 
