@@ -1,4 +1,6 @@
 import pool from "../../db/index.mjs";
+import generatePmPdfModule from "../generatePDFController.mjs";
+
 
 const getReports = (async (request, response) => {
   pool.query('SELECT * FROM community_complaints ORDER BY id ASC', (error, results) => {
@@ -34,6 +36,25 @@ const createReport = (request, response) => {
       response.status(201).send(`Complainant added with ID: ${results.insertId}`);
     });
 }
+
+
+const updatePmVerificationStatusAdmin = (request, response) => {
+  const { id } = request.params;
+  const { complaint_status } = request.body;
+  const { officer_in_charge } = request.body;
+
+  try {
+    pool.query('UPDATE lost_report_letter SET complaint_status = $1 , officer_in_charge = $2 WHERE id = $3', [
+      complaint_status,
+      officer_in_charge,
+      id
+    ]);
+    response.json({ message: 'Verification status updated' });
+  } catch (error) {
+    console.error('Error updating status:', error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 const updateReport = (request, response) => {
   const id = parseInt(request.params.id)
@@ -131,10 +152,48 @@ const deleteReport = (request, response) => {
   })
 }
 
+
+const downloadPdf = async (request, response) => {
+  const { id } = request.params;
+
+  try {
+    const pmData = await pool.query("SELECT * FROM community_complaints WHERE id = $1", [id]);
+    if (pmData.rows.length === 0) {
+      return response.status(404).json({ error: "pm not found" });
+    }
+    const pm = pmData.rows[0];
+
+    const usersData = await pool.query("SELECT * FROM users WHERE id = $1", [
+      pm.officer_in_charge,
+    ]);
+    if (usersData.rows.length === 0) {
+      return response.status(404).json({ error: "Officer not found" });
+    }
+    const pmOfficer = usersData.rows[0];
+
+    const pdfBuffer = await generatePmPdfModule.generatePmPdf(
+      pm,
+      pmOfficer
+    );
+
+    response.setHeader("Content-Type", "application/pdf");
+    response.setHeader(
+      "Content-Disposition",
+      `attachment; filename=pm_${id}.pdf`
+    );
+    response.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    response.status(500).json({ error: "Failed to generate PDF" });
+  }
+};
+
 export default {
   getReports,
   getReportById,
+  downloadPdf,
   createReport,
+  updatePmVerificationStatusAdmin,
   updateReport,
   patchReport,
   deleteReport,

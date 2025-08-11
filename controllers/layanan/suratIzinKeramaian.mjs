@@ -1,4 +1,9 @@
+import generateSikPdfModule from "../generatePDFController.mjs";
 import pool from "../../db/index.mjs";
+import { v2 as cloudinary } from 'cloudinary';
+import { Readable } from 'stream';
+import dotenv from 'dotenv';
+
 
 const getSiks = (async (request, response) => {
   pool.query('SELECT * FROM crowd_permit_letter ORDER BY id ASC', (error, results) => {
@@ -49,6 +54,25 @@ const updateSik = (request, response) => {
     }
   )
 }
+
+
+const updateSikVerificationStatusAdmin = (request, response) => {
+  const { id } = request.params;
+  const { status_handling } = request.body;
+  const { officer_in_charge } = request.body;
+
+  try {
+    pool.query('UPDATE crowd_permit_letter SET status_handling = $1 , officer_in_charge = $2 WHERE id = $3', [
+      status_handling,
+      officer_in_charge,
+      id
+    ]);
+    response.json({ message: 'Verification status updated' });
+  } catch (error) {
+    console.error('Error updating status:', error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
 const patchSik = async (request, response) => {
@@ -114,7 +138,7 @@ const patchSik = async (request, response) => {
 const deleteSik = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM rowd_permit_letter WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM crowd_permit_letter WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -122,10 +146,47 @@ const deleteSik = (request, response) => {
   })
 }
 
+const downloadPdf = async (request, response) => {
+  const { id } = request.params;
+
+  try {
+    const sikData = await pool.query("SELECT * FROM crowd_permit_letter WHERE id = $1", [id]);
+    if (sikData.rows.length === 0) {
+      return response.status(404).json({ error: "sik not found" });
+    }
+    const sik = sikData.rows[0];
+
+    const usersData = await pool.query("SELECT * FROM users WHERE id = $1", [
+      sik.officer_in_charge,
+    ]);
+    if (usersData.rows.length === 0) {
+      return response.status(404).json({ error: "Officer not found" });
+    }
+    const sikOfficer = usersData.rows[0];
+
+    const pdfBuffer = await generateSikPdfModule.generateSikPdf(
+      sik,
+      sikOfficer
+    );
+
+    response.setHeader("Content-Type", "application/pdf");
+    response.setHeader(
+      "Content-Disposition",
+      `attachment; filename=sik_${id}.pdf`
+    );
+    response.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    response.status(500).json({ error: "Failed to generate PDF" });
+  }
+};
+
 export default {
+  downloadPdf,
   getSiks,
   getSikById,
   createSik,
+  updateSikVerificationStatusAdmin,
   updateSik,
   patchSik,
   deleteSik,

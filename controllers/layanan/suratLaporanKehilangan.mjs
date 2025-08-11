@@ -1,4 +1,6 @@
 import pool from "../../db/index.mjs";
+import generateSlkPdfModule from "../generatePDFController.mjs";
+
 
 const getSlks = (async (request, response) => {
   pool.query('SELECT * FROM lost_report_letter ORDER BY id ASC', (error, results) => {
@@ -33,6 +35,25 @@ const createSlk = (request, response) => {
       response.status(201).send(`User added with ID: ${results.insertId}`);
     });
 }
+
+
+const updateSlkVerificationStatusAdmin = (request, response) => {
+  const { id } = request.params;
+  const { status_handling } = request.body;
+  const { officer_in_charge } = request.body;
+
+  try {
+    pool.query('UPDATE lost_report_letter SET status_handling = $1 , officer_in_charge = $2 WHERE id = $3', [
+      status_handling,
+      officer_in_charge,
+      id
+    ]);
+    response.json({ message: 'Verification status updated' });
+  } catch (error) {
+    console.error('Error updating status:', error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 const updateSlk = (request, response) => {
   const id = parseInt(request.params.id)
@@ -115,6 +136,43 @@ const deleteSlk = (request, response) => {
   })
 }
 
+
+const downloadPdf = async (request, response) => {
+  const { id } = request.params;
+
+  try {
+    const slkData = await pool.query("SELECT * FROM lost_report_letter WHERE id = $1", [id]);
+    if (slkData.rows.length === 0) {
+      return response.status(404).json({ error: "slk not found" });
+    }
+    const slk = slkData.rows[0];
+
+    const usersData = await pool.query("SELECT * FROM users WHERE id = $1", [
+      slk.officer_in_charge,
+    ]);
+    if (usersData.rows.length === 0) {
+      return response.status(404).json({ error: "Officer not found" });
+    }
+    const slkOfficer = usersData.rows[0];
+
+    const pdfBuffer = await generateSlkPdfModule.generateSlkPdf(
+      slk,
+      slkOfficer
+    );
+
+    response.setHeader("Content-Type", "application/pdf");
+    response.setHeader(
+      "Content-Disposition",
+      `attachment; filename=slk_${id}.pdf`
+    );
+    response.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    response.status(500).json({ error: "Failed to generate PDF" });
+  }
+};
+
+
 export default {
   getSlks,
   getSlkById,
@@ -122,4 +180,6 @@ export default {
   updateSlk,
   patchSik,
   deleteSlk,
+  downloadPdf,
+  updateSlkVerificationStatusAdmin,
 }
