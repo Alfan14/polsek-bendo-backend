@@ -47,7 +47,6 @@ const updatePmVerificationStatusAdmin = (request, response) => {
     pool.query('UPDATE lost_report_letter SET complaint_status = $1 , officer_in_charge = $2 WHERE id = $3', [
       complaint_status,
       officer_in_charge,
-      id
     ]);
     response.json({ message: 'Verification status updated' });
   } catch (error) {
