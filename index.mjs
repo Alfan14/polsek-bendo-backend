@@ -57,7 +57,6 @@ app.use(express.json());
 
 // API Routes
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-// app.use('/api/', userRoutes);
 app.use('/api/', pengaduanMasyarakatRoutes);
 app.use('/api/', skckRoutes);
 app.use('/api/', suratIzinKeramaianRoutes);
@@ -65,6 +64,8 @@ app.use('/api/', suratLaporanKehilanganRoutes);
 app.use('/api/', beritaRoutes);
 app.use('/api/', noteRoutes);
 app.use('/api/', cloudinaryController);
+app.use('/api/', userRoutes);
+
 
 // Auth Routes
 app.use('/auth/', authRoutes);
