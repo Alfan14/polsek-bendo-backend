@@ -67,7 +67,7 @@ const generalFormParser = multer();
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', db.getUsers);
+router.get('/users', db.getUsers);
 
 /**
  * @swagger
@@ -91,7 +91,7 @@ router.get('/', db.getUsers);
  *       404:
  *         description: User not found
  */
-router.get('/:id', db.getUserById);
+router.get('/users/:id', db.getUserById);
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ router.get('/:id', db.getUserById);
  *       201:
  *         description: User created successfully
  */
-router.post('/', db.createUser);
+router.post('/users', db.createUser);
 
 /**
  * @swagger
@@ -135,7 +135,7 @@ router.post('/', db.createUser);
  *       404:
  *         description: User not found
  */
-router.put('/:id', db.updateUser);
+router.put('/users/:id', db.updateUser);
 
 /**
  * @swagger
@@ -161,7 +161,7 @@ router.put('/:id', db.updateUser);
  *       404:
  *         description: User not found
  */
-router.patch('/:id',  db.updateUser);
+router.patch('/users/:id',  db.updateUser);
 
 /**
  * @swagger
@@ -181,6 +181,6 @@ router.patch('/:id',  db.updateUser);
  *       404:
  *         description: User not found
  */
-router.delete('/:id', db.deleteUser);
+router.delete('/users/:id', db.deleteUser);
 
 export default router;

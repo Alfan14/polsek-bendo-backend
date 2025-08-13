@@ -9,21 +9,16 @@ const getUsers = (async (request, response) => {
   })
 });
 
-const getUserById = (request, response) => {
-  const id = Number(request.params.id);
-
-  if (!Number.isInteger(id)) {
-    return response.status(400).json({ error: 'Invalid user ID' });
-  }
+const getUserById = (async (request, response) => {
+  const id = parseInt(request.params.id)
 
   pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {
-      console.error(error);
-      return response.status(500).json({ error: 'Database error' });
+      throw error
     }
-    response.status(200).json(results.rows);
-  });
-};
+    response.status(200).json(results.rows)
+  })
+});
 
 
 const createUser = (request, response) => {
