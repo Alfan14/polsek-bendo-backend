@@ -10,15 +10,21 @@ const getUsers = (async (request, response) => {
 });
 
 const getUserById = (request, response) => {
-  const id = parseInt(request.params.id)
+  const id = Number(request.params.id);
+
+  if (!Number.isInteger(id)) {
+    return response.status(400).json({ error: 'Invalid user ID' });
+  }
 
   pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {
-      throw error
+      console.error(error);
+      return response.status(500).json({ error: 'Database error' });
     }
-    response.status(200).json(results.rows)
-  })
-}
+    response.status(200).json(results.rows);
+  });
+};
+
 
 const createUser = (request, response) => {
   const { username, email, password, role, createdAt, updatedAt, profile_picture, ktp } = request.body
