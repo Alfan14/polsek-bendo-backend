@@ -12,6 +12,7 @@ import helmet from "helmet";
 import authRoutes from './routes/api/authRoutes.mjs';
 import userRoutes from './routes/api/userRoute.mjs';
 import skckRoutes from './routes/api/skckRoute.mjs';
+import { swaggerUi, specs } from "./swagger.mjs";
 import suratLaporanKehilanganRoutes from "./routes/api/suratLaporanKehilanganRoute.mjs";
 import suratIzinKeramaianRoutes from "./routes/api/suratIzinKeramaian.mjs";
 import pengaduanMasyarakatRoutes from "./routes/api/pengaduanMasyarakatRoute.mjs";
@@ -55,6 +56,7 @@ app.use(express.json());
 // app.use(express.text());
 
 // API Routes
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/', userRoutes);
 app.use('/api/', skckRoutes);
 app.use('/api/', pengaduanMasyarakatRoutes);

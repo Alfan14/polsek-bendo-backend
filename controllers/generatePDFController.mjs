@@ -44,8 +44,8 @@ const generateSkckPdf = async (skck, skckOfficer) => {
     const submissionDate = new Date(skck.submission_date);
 
     const expirationDate = new Date(submissionDate);
-
-    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+    
+    expirationDate.setMonth(submissionDate.getMonth() + 6);
 
     const formattedSubmissionDate = submissionDate.toLocaleDateString('id-ID', {
         day: 'numeric',
@@ -935,9 +935,9 @@ const generatePmPdf = async (pm, pmOfficer) => {
 };
 
 
-export default { 
+export default {
     generateSkckPdf,
-    generateSikPdf, 
-    generateSlkPdf , 
-    generatePmPdf 
+    generateSikPdf,
+    generateSlkPdf,
+    generatePmPdf
 };

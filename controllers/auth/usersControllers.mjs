@@ -21,11 +21,11 @@ const getUserById = (request, response) => {
 }
 
 const createUser = (request, response) => {
-  const { username, email, password, role, createdAt, updatedAt, profile_picture } = request.body
+  const { username, email, password, role, createdAt, updatedAt, profile_picture, ktp } = request.body
 
   pool.query(
-    'INSERT INTO users (username, email, password, role, created_at, updated_at, profile_picture) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-    [username, email, password, role, createdAt, updatedAt, profile_picture],
+    'INSERT INTO users (username, email, password, role, created_at, updated_at, profile_picture, ktp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8 )',
+    [username, email, password, role, createdAt, updatedAt, profile_picture, ktp],
     (error, results) => {
       if (error) {
         throw error;
@@ -36,11 +36,11 @@ const createUser = (request, response) => {
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
-  const { username, email, password, role, createdAt, updatedAt, profile_picture } = request.body
+  const { username, email, password, role, createdAt, updatedAt, profile_picture, ktp } = request.body
 
   pool.query(
-    'UPDATE users SET username = $1, email = $2 , password = $3 , role = $4 , createdAt = $5, updatedAt = $6 , profile_picture = $7 WHERE id = $8',
-    [username, email, password, role, , createdAt, updatedAt, profile_picture, id],
+    'UPDATE users SET username = $1, email = $2 , password = $3 , role = $4 , createdAt = $5, updatedAt = $6 , profile_picture = $7 , ktp = $8 WHERE id = $9',
+    [username, email, password, role, , createdAt, updatedAt, profile_picture, ktp, id],
     (error, results) => {
       if (error) {
         throw error
@@ -52,7 +52,7 @@ const updateUser = (request, response) => {
 
 const patchReport = async (request, response) => {
     const id = parseInt(request.params.id);
-    const { username, email, password, role, createdAt, updatedAt, profile_picture } = request.body;
+    const { username, email, password, role, createdAt, updatedAt, profile_picture, ktp } = request.body;
 
     const fields = [];
     const values = [];
@@ -88,6 +88,12 @@ const patchReport = async (request, response) => {
       fields.push(`profile_picture = $${valueIndex++}`);
       values.push(profile_picture);
     }
+
+    if (ktp) {
+      fields.push(`ktp = $${valueIndex++}`);
+      values.push(ktp);
+    }
+    
 
     if (fields.length === 0) {
       return response.status(400).json({ message: "No fields to update." });
