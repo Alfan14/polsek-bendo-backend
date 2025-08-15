@@ -9,13 +9,14 @@ const User = db.users;
 
 const register = async (req, res) => {
   try {
-    const { username, email, password, role, profile_picture } = req.body;
+    const { username, email, password, role, profile_picture, ktp } = req.body;
     const data = {
       username,
       email,
       password: await bcrypt.hash(password, 10),
       role,
-      profile_picture
+      profile_picture,
+      ktp
     };
 
     const user = await User.create(data);
