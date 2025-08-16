@@ -41,7 +41,6 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-        },
       ktp: {
         type: DataTypes.TEXT,
         allowNull: true,
