@@ -101,7 +101,7 @@ const patchUser = async (request, response) => {
     }
 
     values.push(id);
-    const query = `UPDATE community_complaints SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
+    const query = `UPDATE users SET ${fields.join(', ')} WHERE id = $${valueIndex}`;
 
     pool.query(query, values, (error, results) => {
       if (error) {
