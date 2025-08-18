@@ -51,7 +51,7 @@ const updateUser = (request, response) => {
   )
 }
 
-const patchReport = async (request, response) => {
+const patchUser = async (request, response) => {
     const id = parseInt(request.params.id);
     const { username, email, password, role, createdAt, updatedAt, profile_picture, ktp } = request.body;
 
@@ -128,5 +128,6 @@ export default {
   getUserById,
   createUser,
   updateUser,
+  patchUser,
   deleteUser,
 }
