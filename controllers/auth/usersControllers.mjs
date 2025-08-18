@@ -77,11 +77,11 @@ const patchReport = async (request, response) => {
       values.push(role);
     }
     if (createdAt) {
-      fields.push(`createdAt = $${valueIndex++}`);
+      fields.push(`created_at = $${valueIndex++}`);
       values.push(createdAt);
     }
     if (updatedAt) {
-      fields.push(`updatedAt = $${valueIndex++}`);
+      fields.push(`updated_at = $${valueIndex++}`);
       values.push(updatedAt);
     }
 
