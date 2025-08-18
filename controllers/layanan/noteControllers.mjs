@@ -39,7 +39,7 @@ const updateNotes = (request, response) => {
   const { user_id, officer_id, officer_name, officer_note, date, time, related_field, correction_link } = request.body
 
   pool.query(
-    'UPDATE notes SET officer_id = $1, officer_name = $2, officer_note = $3, date = $4, time = $5, related_field = $6, correction_link = $7, user_id = $8  WHERE id = $8',
+    'UPDATE notes SET officer_id = $1, officer_name = $2, officer_note = $3, date = $4, time = $5, related_field = $6, correction_link = $7, user_id = $8  WHERE id = $9',
     [officer_id, officer_name, officer_note, date, time, related_field, correction_link, id],
     (error, results) => {
       if (error) {
