@@ -161,7 +161,7 @@ router.put('/users/:id', db.updateUser);
  *       404:
  *         description: User not found
  */
-router.patch('/users/:id',  db.updateUser);
+router.patch('/users/:id',  db.patchUser);
 
 /**
  * @swagger
