@@ -222,10 +222,10 @@ const generateSkckPdf = async (skck, skckOfficer) => {
                         <div><span class="data-value">: ${skck.complete_address}</span></div>
 
                         <div><span class="data-label">Pekerjaan</span></div>
-                        <div><span class="data-value">: Karyawan</span></div>
+                        <div><span class="data-value">: ${skck.job}</span></div>
 
                         <div><span class="data-label">Occupation</span></div>
-                        <div><span class="data-value">: Employee</span></div>
+                        <div><span class="data-value">: ${skck.job}</span></div>
 
                         <div><span class="data-label">Nomor Kartu Tanda Penduduk</span></div>
                         <div><span class="data-value">: ${skck.id_number}</span></div>
@@ -299,8 +299,8 @@ const generateSkckPdf = async (skck, skckOfficer) => {
                             <p>On : ${formattedSubmissionDate}</p>
                             <p class="mt-4 font-bold">KEPALA KEPOLISIAN SEKTOR BENDO</p>
                             <div class="h-20 w-48 border-b-2 border-gray-400 mx-auto mt-4"></div>
-                            <p class="mt-2 text-sm">${skckOfficer.username}</p>
-                            <p class="text-xs">NRP.${skckOfficer.nrp}</p>
+                            <p class="mt-2 text-sm"></p>
+                            <p class="text-xs">NRP.</p>
                         </div>
                     </div>
                 </div >
@@ -493,8 +493,8 @@ const generateSikPdf = async (sik, sikOfficer) => {
                             <p>Pada tanggal ${formattedSubmissionDate}</p>
                             <p class="mt-4 font-bold">A.n. KEPALA KEPOLISIAN NEGARA REPUBLIK INDONESIA</p>
                             <p class="font-bold">KEPALA KEPOLISIAN DAERAH BENDO</p>
-                            <p class="mt-8 font-bold"> ${sikOfficer.username}</p>
-                            <p class="mt-1">Pangkat. Nrp. ${sikOfficer.nrp}</p>
+                            <p class="mt-8 font-bold"> </p>
+                            <p class="mt-1">Pangkat. Nrp. </p>
                         </div>
                     </div>
 
@@ -680,8 +680,8 @@ const generateSlkPdf = async (slk, slkOfficer) => {
                             <div class="mt-8 mb-2 flex justify-center items-center">
                                 <div class="h-12 w-40 border-b border-gray-400 mx-auto"></div>
                             </div>
-                            <p class="font-bold">${slkOfficer.username}</p>
-                            <p>${slkOfficer.title} NRP ${slkOfficer.nrp}</p>
+                            <p class="font-bold"></p>
+                            <p>NRP.</p>
                         </div>
                     </div>
 
@@ -917,7 +917,7 @@ const generatePmPdf = async (pm, pmOfficer) => {
                                 <div class="h-12 w-40 border-b border-gray-400 mx-auto"></div>
                             </div>
                             <p class="font-bold">${pmOfficer.username}</p>
-                            <p>${pmOfficer.title} NRP ${pmOfficer.nrp}</p>
+                            <p>NRP</p>
                         </div>
                     </div>
 
